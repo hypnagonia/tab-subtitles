@@ -1,12 +1,14 @@
 # Tab Subtitles
 
-<p align="center">
-  <img src="store/media/icon-128.png" width="96" height="96" alt="Tab Subtitles icon">
-</p>
-
-![Tab Subtitles promotional banner](store/media/promo-marquee-1400x560.png)
-
 Live captions for audio playing in a Chrome tab. Subtitles appear in the side panel and can optionally be shown over the page or fullscreen video.
+
+## Live captions
+
+![Live captions in the side panel and over a video](store/media/screenshot-1-live.png)
+
+## Settings
+
+![Subtitle and recognition settings](store/media/screenshot-2-settings.png)
 
 ## Features
 
@@ -17,12 +19,6 @@ Live captions for audio playing in a Chrome tab. Subtitles appear in the side pa
 - Adjustable typeface, size, color, and timestamps
 - TXT, SRT, and VTT export
 - No account, advertising, analytics, or cloud storage
-
-## Screenshots
-
-![Live captions in the side panel and over a video](store/media/screenshot-1-live.png)
-
-![Subtitle and recognition settings](store/media/screenshot-2-settings.png)
 
 ## Install locally
 
