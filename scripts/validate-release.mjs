@@ -36,6 +36,7 @@ for (const devFile of ['preview.html', 'harness.html', 'store-preview.html']) {
 }
 
 for (const [name, expected] of [
+  ['icon-128.png', '128x128'],
   ['promo-small-440x280.png', '440x280'],
   ['promo-marquee-1400x560.png', '1400x560'],
   ['screenshot-1-live.png', '1280x800'],

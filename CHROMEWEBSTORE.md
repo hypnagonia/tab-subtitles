@@ -31,7 +31,7 @@ Some protected pages and DRM-protected media cannot be captured. Offline transcr
 
 ## Graphic assets
 
-- Store icon: `dist/icons/icon-128.png`
+- Store icon: `store/media/icon-128.png` (the same artwork is packaged at `dist/icons/icon-128.png`)
 - Screenshot — live captions: `store/media/screenshot-1-live.png`
 - Screenshot — settings: `store/media/screenshot-2-settings.png`
 - Small promo tile: `store/media/promo-small-440x280.png`
