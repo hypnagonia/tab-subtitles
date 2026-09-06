@@ -1,0 +1,8 @@
+{
+  "appName": {
+    "message": "Tab Subtitles"
+  },
+  "appDescription": {
+    "message": "Live captions for tab audio, with optional offline transcription, subtitle overlays, speaker colors, and SRT/VTT export."
+  }
+}

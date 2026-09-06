@@ -1,0 +1,8 @@
+{
+  "appName": {
+    "message": "Subtítulos de pestaña"
+  },
+  "appDescription": {
+    "message": "Subtítulos para el audio de pestañas, con modo sin conexión opcional, superposición, colores de voz y exportación SRT/VTT."
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "appName": {
+    "message": "Sottotitoli della scheda"
+  },
+  "appDescription": {
+    "message": "Sottotitoli per l’audio delle schede, con modalità offline opzionale, overlay, colori delle voci ed export SRT/VTT."
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "tab-subtitles",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Tab Subtitles — live on-device subtitles for the current tab.",
+  "type": "module",
+  "homepage": "https://jenyadoesapps.com",
+  "scripts": {
+    "dev": "vite build --watch --mode development",
+    "build": "npm run icons && tsc --noEmit && vite build",
+    "icons": "node scripts/generate-icons.mjs",
+    "release": "npm run build && npm test && node scripts/validate-release.mjs && node scripts/package-release.mjs",
+    "test": "node --test --experimental-strip-types tests/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^3.7.6",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.287",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "appName": {
+    "message": "Tab-Untertitel"
+  },
+  "appDescription": {
+    "message": "Live-Untertitel für Tab-Audio mit optionaler Offline-Erkennung, Seiten-Overlay, Sprecherfarben und SRT/VTT-Export."
+  }
+}
