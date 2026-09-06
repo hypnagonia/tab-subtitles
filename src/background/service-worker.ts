@@ -12,7 +12,6 @@ import {
   DEFAULT_SETTINGS,
   DEFAULT_TRANSCRIPTION,
   FONTS,
-  LANGUAGE_CODES,
   speakerColor,
   tagFor,
   type AppState,
@@ -60,52 +59,9 @@ function hydrate(): Promise<void> {
     for (const tabId of (stored[SESSION_INVOKED_KEY] as number[] | undefined) ?? []) invokedTabs.add(tabId);
     state.activeTab = await readActiveTab();
     state.activeTabInvoked = isInvoked(state.activeTab);
-    refreshDetectedLanguage();
     await restoreCapture();
   })();
   return ready;
-}
-
-/* ------------------------------------------------------------ language --- */
-
-let pageLanguage: string | null = null;
-
-function normalizeLanguage(raw: string | undefined | null): string | null {
-  const code = (raw ?? '').trim().toLowerCase().split(/[-_]/)[0];
-  return code && LANGUAGE_CODES.has(code) ? code : null;
-}
-
-/** What the page says it is written in. activeTab covers this — the same grant
- *  that let us capture the tab in the first place. */
-async function readPageLanguage(tabId: number): Promise<string | null> {
-  try {
-    const [injected] = await chrome.scripting.executeScript({
-      target: { tabId },
-      func: () =>
-        document.documentElement.lang ||
-        document.querySelector<HTMLMetaElement>('meta[property="og:locale"]')?.content ||
-        '',
-    });
-    return normalizeLanguage(injected?.result as string | undefined);
-  } catch {
-    return null;
-  }
-}
-
-/**
- * What the user picked, then what the page says, then the browser's own
- * language, and only then the model's own guess.
- */
-function resolveLanguage(): string | null {
-  if (state.settings.language !== 'auto') return state.settings.language;
-  return pageLanguage ?? normalizeLanguage(chrome.i18n.getUILanguage());
-}
-
-function refreshDetectedLanguage(): void {
-  state.transcription = {
-    ...state.transcription,
-    detected: state.settings.language === 'auto' ? resolveLanguage() : null,
-  };
 }
 
 /* ------------------------------------------------------------- overlay --- */
@@ -316,14 +272,12 @@ async function startSubtitles(tabId: number): Promise<void> {
   try {
     await ensureOffscreen();
     const streamId = await mediaStreamId(tabId);
-    pageLanguage = await readPageLanguage(tabId);
-    refreshDetectedLanguage();
 
     const result = await tellOffscreen({
       type: 'audio:start',
       streamId,
-      language: resolveLanguage(),
-      tag: tagFor(resolveLanguage()),
+      language: state.settings.language,
+      tag: tagFor(state.settings.language),
       speakers: state.settings.speakers,
       engine: state.settings.engine,
     });
@@ -343,7 +297,6 @@ async function startSubtitles(tabId: number): Promise<void> {
 async function stopSubtitles(error: ErrorCode | null = null): Promise<void> {
   await hideOnPage();
   overlayInjected = false;
-  pageLanguage = null;
   await tellOffscreen({ type: 'audio:stop' });
   await chrome.storage.session.remove(SESSION_TAB_KEY);
   state.capture = { status: error ? 'error' : 'idle', tab: error ? state.capture.tab : null, error };
@@ -462,11 +415,10 @@ chrome.runtime.onMessage.addListener((raw, _sender, sendResponse) => {
         else if (next.overlay && overlayCurrent) {
           await showOnPage(overlayCurrent.text, overlayCurrent.speaker, overlayCurrent.id);
         }
-        refreshDetectedLanguage();
         await tellOffscreen({
           type: 'config',
-          language: resolveLanguage(),
-          tag: tagFor(resolveLanguage()),
+          language: next.language,
+          tag: tagFor(next.language),
           speakers: next.speakers,
         });
         pushState();

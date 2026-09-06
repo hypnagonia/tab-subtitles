@@ -21,8 +21,8 @@ Features:
 - Live captions in a focused side panel
 - Optional captions over the page and in fullscreen video
 - Optional offline Whisper transcription
-- Optional speaker separation and speaker colors (off by default)
-- Automatic or manually selected spoken language
+- Speaker separation and speaker colors (on by default, switchable in settings)
+- Spoken language picked from the panel, switchable mid-session
 - Adjustable typeface, text size, color, and timestamps
 - Copy transcripts or export TXT, SRT, and VTT files
 - No account, advertising, analytics, or cloud storage

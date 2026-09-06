@@ -34,7 +34,7 @@ Network requests used for Chrome transcription or model downloads use HTTPS or b
 
 ## User choices
 
-Users can select Offline model before starting captions to keep speech recognition on their device. Speaker separation and on-page subtitles are optional and disabled by default. Users can stop captions at any time, clear the visible transcript, remove saved exports, clear extension storage, or uninstall the extension.
+Users can select Offline model before starting captions to keep speech recognition on their device. On-page subtitles are optional and disabled by default. Speaker separation is on by default and can be switched off in settings; it runs locally and downloads an approximately 7 MB model on first use. Users can stop captions at any time, clear the visible transcript, remove saved exports, clear extension storage, or uninstall the extension.
 
 ## Changes and contact
 

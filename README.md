@@ -14,8 +14,8 @@ Live captions for audio playing in a Chrome tab. Subtitles appear in the side pa
 
 - Chrome Speech Recognition for quick startup
 - Optional on-device Whisper transcription
-- Optional speaker separation and speaker colors
-- Automatic or manually selected spoken language
+- Speaker separation and speaker colors, on by default
+- Spoken language picked from the panel, switchable mid-session
 - Adjustable typeface, size, color, and timestamps
 - TXT, SRT, and VTT export
 - No account, advertising, analytics, or cloud storage
@@ -45,7 +45,7 @@ Chrome requires the toolbar click before an extension can capture a tab. Protect
 | Chrome | May send tab audio to Google unless Chrome has its on-device language model installed. |
 | Offline model | Runs Whisper locally in the browser after an approximately 150 MB model download. |
 
-Speaker separation is disabled by default. Enabling it downloads an approximately 7 MB model and processes speaker embeddings locally.
+Speaker separation is on by default and can be switched off in settings. It downloads an approximately 7 MB model on first use and processes speaker embeddings locally.
 
 The developer does not receive audio or transcripts. Transcripts remain in extension memory for the active session unless the user copies or exports them. See [PRIVACY.md](PRIVACY.md) for the complete policy.
 

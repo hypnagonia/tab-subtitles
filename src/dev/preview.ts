@@ -10,15 +10,15 @@ const base: AppState = {
   settings: {
     engine: 'auto',
     uiLanguage: 'auto',
-    language: 'auto',
+    language: 'en',
     font: 'sans',
     fontSize: 17,
     color: 'white',
     timestamps: true,
-    speakers: false,
+    speakers: true,
     overlay: false,
   },
-  transcription: { status: 'off', active: null, model: 'ready', progress: 1, error: null, detected: 'en' },
+  transcription: { status: 'off', active: null, model: 'ready', progress: 1, error: null },
 };
 
 const segments: Segment[] = [

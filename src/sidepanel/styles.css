@@ -75,7 +75,7 @@ body {
 
 .head {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 10px;
   padding: 13px 14px;
@@ -84,6 +84,20 @@ body {
 
 .who {
   min-width: 0;
+}
+
+.head-tools {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+}
+
+/* Narrow enough to leave the host room, wide enough to read the language. */
+select.lang {
+  max-width: 118px;
+  padding: 5px 6px;
+  text-overflow: ellipsis;
 }
 
 .host {
@@ -145,7 +159,49 @@ body {
   padding: 16px 14px 20px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  /* The lines carry their own padding, so the gap makes up the difference. */
+  gap: 7px;
+}
+
+/* Every settled line is clickable: it copies itself. */
+.cue {
+  position: relative;
+  margin: 0 -8px;
+  padding: 4px 8px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.cue:hover,
+.cue:focus-visible {
+  background: var(--raised);
+}
+
+.cue[data-copied='true'] {
+  background: var(--raised-hover);
+}
+
+/* The line being spoken is not finished, so there is nothing to copy yet. */
+.cue.interim {
+  cursor: default;
+}
+
+.cue.interim:hover {
+  background: none;
+}
+
+.cue-copied {
+  position: absolute;
+  top: 3px;
+  right: 6px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--hairline);
+  color: var(--muted);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.02em;
 }
 
 .cue-meta {
@@ -182,7 +238,6 @@ body {
   flex-direction: column;
   gap: 8px;
   padding: 12px 14px 14px;
-  border-top: 1px solid var(--hairline);
 }
 
 button {
@@ -255,17 +310,25 @@ button.icon[aria-pressed='true'] {
   border-color: var(--hairline);
 }
 
+/* The rule belongs to this bar rather than to the footer around it, so it sits
+   the same distance off the bottom whether or not a start button is above it.
+   The negative margin takes it back out to the full width of the panel. */
 .bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+  margin: 0 -14px;
+  padding: 12px 14px 0;
+  border-top: 1px solid var(--hairline);
 }
 
 .tools {
   display: flex;
   align-items: center;
   gap: 2px;
+  /* A tool button's height, held even on a screen that has no tools. */
+  min-height: 28px;
 }
 
 .tool {

@@ -8,7 +8,7 @@ import { TranscriptionController } from '../transcription/controller';
 import { toSw, type OffscreenCommand, type OffscreenEvent } from '../shared/messages';
 import type { ActiveEngine, Engine, ErrorCode } from '../shared/types';
 
-let language: string | null = null;
+let language = 'en';
 let tag = 'en-US';
 let speakers = false;
 let engine: Engine = 'auto';

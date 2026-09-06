@@ -240,7 +240,7 @@ async function embedOnly(id: number, audio: Float32Array): Promise<void> {
   post({ type: 'embedding', id, embedding }, embedding ? [embedding.buffer] : []);
 }
 
-async function transcribe(id: number, audio: Float32Array, language: string | null, speakers: boolean): Promise<void> {
+async function transcribe(id: number, audio: Float32Array, language: string, speakers: boolean): Promise<void> {
   await load(speakers);
 
   const options: Record<string, unknown> = { task: 'transcribe', return_timestamps: false, max_new_tokens: 160 };

@@ -1,11 +1,18 @@
-import { DEFAULT_SETTINGS, type Settings } from './types';
+import { DEFAULT_SETTINGS, LANGUAGE_CODES, initialLanguage, type Settings } from './types';
 
 const KEY_SETTINGS = 'settings';
 const KEY_MODEL_READY = 'modelReady';
 
 export async function loadSettings(): Promise<Settings> {
   const stored = await chrome.storage.local.get(KEY_SETTINGS);
-  return { ...DEFAULT_SETTINGS, ...(stored[KEY_SETTINGS] as Partial<Settings> | undefined) };
+  const settings = { ...DEFAULT_SETTINGS, ...(stored[KEY_SETTINGS] as Partial<Settings> | undefined) };
+  // Spoken language used to have an 'auto' setting that only ever guessed. An
+  // install carrying it, or anything else we no longer offer, starts from the
+  // browser's own language instead.
+  if (!LANGUAGE_CODES.has(settings.language)) {
+    settings.language = initialLanguage(chrome.i18n?.getUILanguage?.());
+  }
+  return settings;
 }
 
 export async function saveSettings(settings: Settings): Promise<void> {

@@ -24,7 +24,7 @@ export class TranscriptionController {
   private embeds = new Map<number, (embedding: Float32Array | null) => void>();
   private busy = false;
   private nextId = 1;
-  private language: string | null = null;
+  private language = 'en';
   private speakers = false;
 
   private speakerCluster = new SpeakerCluster(SPEAKERS);
@@ -44,7 +44,7 @@ export class TranscriptionController {
     this.chunker = new AudioChunker((audio, start) => this.enqueue(audio, start));
   }
 
-  configure(language: string | null, speakers: boolean): void {
+  configure(language: string, speakers: boolean): void {
     this.language = language;
     if (this.speakers !== speakers) this.resetVoices();
     this.speakers = speakers;

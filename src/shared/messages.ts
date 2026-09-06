@@ -16,13 +16,13 @@ export type OffscreenCommand =
   | {
       type: 'audio:start';
       streamId: string;
-      language: string | null;
+      language: string;
       tag: string;
       speakers: boolean;
       engine: Engine;
     }
   | { type: 'audio:stop' }
-  | { type: 'config'; language: string | null; tag: string; speakers: boolean }
+  | { type: 'config'; language: string; tag: string; speakers: boolean }
   | { type: 'model:download'; speakers: boolean }
   | { type: 'transcript:get' }
   | { type: 'transcript:clear' };

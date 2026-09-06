@@ -17,7 +17,7 @@ export interface Settings {
   engine: Engine;
   /** Interface language: a code, or 'auto' to follow the browser. */
   uiLanguage: string;
-  /** A Whisper language code, or 'auto' to work it out. */
+  /** The language being spoken, as a code from LANGUAGES. */
   language: string;
   font: FontChoice;
   /** Subtitle size in px. */
@@ -33,12 +33,12 @@ export interface Settings {
 export const DEFAULT_SETTINGS: Settings = {
   engine: 'auto',
   uiLanguage: 'auto',
-  language: 'auto',
+  language: 'en',
   font: 'sans',
   fontSize: 17,
   color: 'white',
   timestamps: true,
-  speakers: false,
+  speakers: true,
   overlay: false,
 };
 
@@ -98,6 +98,13 @@ export function tagFor(code: string | null): string {
 
 export const LANGUAGE_CODES = new Set(LANGUAGES.map((language) => language.code));
 
+/** The spoken language a fresh install starts on: the browser's own language
+ *  when it is one we offer, else English. */
+export function initialLanguage(browserLanguage: string | undefined | null): string {
+  const code = (browserLanguage ?? '').trim().toLowerCase().split(/[-_]/)[0];
+  return LANGUAGE_CODES.has(code) ? code : 'en';
+}
+
 export type ModelStatus = 'absent' | 'downloading' | 'preparing' | 'ready' | 'error';
 
 /** Anything that can go wrong, named rather than written out, so the panel can
@@ -130,9 +137,6 @@ export interface TranscriptionState {
   /** 0 – 1 while downloading. */
   progress: number;
   error: ErrorCode | null;
-  /** What 'auto' resolved to: the page's language, else the browser's. Null
-   *  means neither said anything and the model will detect it itself. */
-  detected: string | null;
 }
 
 export interface CaptureState {
@@ -167,5 +171,4 @@ export const DEFAULT_TRANSCRIPTION: TranscriptionState = {
   model: 'absent',
   progress: 0,
   error: null,
-  detected: null,
 };

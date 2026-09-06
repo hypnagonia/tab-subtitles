@@ -8,6 +8,7 @@ import { resolveUiLanguage, translator } from '../shared/i18n';
 import {
   DEFAULT_SETTINGS,
   DEFAULT_TRANSCRIPTION,
+  LANGUAGES,
   type AppState,
   type Segment,
   type Settings,
@@ -114,20 +115,36 @@ export function App() {
             {statusText}
           </div>
         </div>
-        <button
-          className="icon"
-          aria-label={t('settings.title')}
-          aria-pressed={showSettings}
-          onClick={() => setShowSettings((open) => !open)}
-        >
-          <GearIcon />
-        </button>
+        <div className="head-tools">
+          {/* The one setting worth reaching for mid-session: the wrong language
+              here is the difference between subtitles and nonsense. */}
+          <select
+            className="lang"
+            aria-label={t('settings.spokenLanguage')}
+            title={t('settings.spokenLanguage')}
+            value={settings.language}
+            onChange={(event) => patchSettings({ language: event.target.value })}
+          >
+            {LANGUAGES.map((option) => (
+              <option key={option.code} value={option.code}>
+                {option.flag} {option.label}
+              </option>
+            ))}
+          </select>
+          <button
+            className="icon"
+            aria-label={t('settings.title')}
+            aria-pressed={showSettings}
+            onClick={() => setShowSettings((open) => !open)}
+          >
+            <GearIcon />
+          </button>
+        </div>
       </header>
 
       {showSettings ? (
         <SettingsView
           settings={settings}
-          transcription={transcription}
           onChange={patchSettings}
           onClose={() => setShowSettings(false)}
           t={t}
