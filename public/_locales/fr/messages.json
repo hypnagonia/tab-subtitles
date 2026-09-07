@@ -1,8 +1,11 @@
 {
   "appName": {
+    "message": "Tab Subtitles — Live Captions & Translation"
+  },
+  "appShortName": {
     "message": "Tab Subtitles"
   },
   "appDescription": {
-    "message": "Sous-titres pour l’audio des onglets, avec traduction sur l’appareil, mode hors ligne facultatif et export SRT/VTT."
+    "message": "Sous-titres en direct pour vidéos et appels : reconnaissance vocale sur l’appareil, traduction, couleurs et export SRT/VTT."
   }
 }

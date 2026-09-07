@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "default_locale": "en",
   "name": "__MSG_appName__",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "__MSG_appDescription__",
   "homepage_url": "https://jenyadoesapps.com",
   "minimum_chrome_version": "116",
@@ -13,7 +13,7 @@
     "128": "icons/icon-128.png"
   },
   "action": {
-    "default_title": "__MSG_appName__",
+    "default_title": "__MSG_appShortName__",
     "default_icon": {
       "16": "icons/icon-16.png",
       "32": "icons/icon-32.png",

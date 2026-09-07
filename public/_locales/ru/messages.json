@@ -1,8 +1,11 @@
 {
   "appName": {
+    "message": "Tab Subtitles — Live Captions & Translation"
+  },
+  "appShortName": {
     "message": "Tab Subtitles"
   },
   "appDescription": {
-    "message": "Субтитры для звука вкладок: перевод на устройстве, офлайн-режим, показ поверх страницы и экспорт SRT/VTT."
+    "message": "Живые субтитры для любого видео и звонка: распознавание речи на устройстве, перевод, цвета голосов, экспорт SRT/VTT."
   }
 }

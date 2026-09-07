@@ -1,8 +1,11 @@
 {
   "appName": {
+    "message": "Tab Subtitles — Live Captions & Translation"
+  },
+  "appShortName": {
     "message": "Tab Subtitles"
   },
   "appDescription": {
-    "message": "Sottotitoli per l’audio delle schede, con traduzione sul dispositivo, modalità offline opzionale ed export SRT/VTT."
+    "message": "Sottotitoli in tempo reale per video e chiamate: riconoscimento vocale sul dispositivo, traduzione ed export SRT/VTT."
   }
 }

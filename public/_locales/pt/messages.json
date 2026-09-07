@@ -1,8 +1,11 @@
 {
   "appName": {
+    "message": "Tab Subtitles — Live Captions & Translation"
+  },
+  "appShortName": {
     "message": "Tab Subtitles"
   },
   "appDescription": {
-    "message": "Legendas para áudio de separadores, com tradução no dispositivo, modo offline opcional e exportação SRT/VTT."
+    "message": "Legendas em direto para vídeos e chamadas: voz para texto no dispositivo, tradução, cores por voz e exportação SRT/VTT."
   }
 }

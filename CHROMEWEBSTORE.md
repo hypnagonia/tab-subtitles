@@ -2,17 +2,21 @@
 
 ## Product details
 
-**Name:** Tab Subtitles — the same in every locale. The summary and description are translated; the name is a brand and is not.
+**Name:** Tab Subtitles — Live Captions & Translation
+
+The same in every locale: the summary and description are translated, the name is a brand and is not. The store searches the name, so it carries the two terms people type; the toolbar tooltip uses a separate short message (`appShortName`) and stays "Tab Subtitles".
 
 **Category:** Accessibility
 
 **Summary (132 characters maximum):**
 
-Live captions for tab audio, with on-device translation, optional offline transcription, speaker colors, and SRT/VTT export.
+Live subtitles for any video or call: speech to text on your device, translation, speaker colors, SRT/VTT export.
 
-**What's new (0.2.0) — put at the top of the detailed description for this release:**
+Each locale has its own summary in `public/_locales/<locale>/messages.json`, written for what people search in that language rather than translated word for word.
 
-What's new in 0.2.0
+**What's new (0.2.1) — put at the top of the detailed description for this release:**
+
+What's new in 0.2.1
 
 - Translation on your own machine. Choose a language in settings and each line is translated as it is heard, using Chrome's built-in translator. Nothing is sent to a translation service. The line as it was spoken stays above the translation, and exports keep the original.
 - The spoken language now sits in the panel beside the settings icon, so it can be changed while captions are running instead of only before they start.
@@ -24,13 +28,23 @@ Translation needs Chrome 138 or later; without it the option is simply unavailab
 
 **Detailed description:**
 
-Turn audio playing in a Chrome tab into readable live subtitles. Click the toolbar icon on the tab you want to caption and Tab Subtitles opens in the side panel and starts listening.
+Live subtitles for anything playing in a Chrome tab: video, lectures, calls, streams, podcasts. Speech becomes readable text as it is spoken, and can be translated into another language on your own machine as it goes.
 
-Privacy note: Auto mode uses Chrome Speech Recognition first. Depending on your Chrome setup, Chrome may send captured tab audio to Google for transcription. Choose Offline model in settings before starting captions if you want transcription to stay on your device. Tab Subtitles has no account, analytics, advertising, or developer-operated server, and the developer does not receive your audio or transcripts.
+Click the toolbar icon on the tab you want to caption. Tab Subtitles opens in the side panel and starts listening — nothing to set up per site, no account, no upload, no file to prepare.
+
+Works with any tab that plays sound:
+
+- Videos and streams in any player
+- Online meetings and calls
+- Lectures, talks, and courses
+- Podcasts and radio
+- Anything where you would rather read than listen, or need both
+
+Privacy note: Auto mode uses Chrome Speech Recognition first. Depending on your Chrome setup, Chrome may send captured tab audio to Google for transcription. Choose Offline model in settings before starting captions if you want transcription to stay on your device. Translation always runs on your device. Tab Subtitles has no account, analytics, advertising, or developer-operated server, and the developer does not receive your audio or transcripts.
 
 Features:
 
-- Live captions in a focused side panel
+- Live captions in a focused side panel, in 17 spoken languages
 - Optional captions over the page and in fullscreen video
 - Optional offline Whisper transcription
 - Speaker separation and speaker colors (on by default, switchable in settings)
@@ -97,7 +111,7 @@ Create live, readable captions and downloadable subtitle transcripts from audio 
 
 ## Submission checklist
 
-- [ ] Test `release/tab-subtitles-0.2.0.zip` as an unpacked extension in a clean Chrome profile.
+- [ ] Test `release/tab-subtitles-0.2.1.zip` as an unpacked extension in a clean Chrome profile.
 - [ ] Confirm Auto mode’s cloud-processing disclosure is prominent in the listing.
 - [ ] Re-shoot both screenshots from `store-preview.html` whenever the panel changes.
 - [ ] Publish the privacy policy and add its HTTPS URL to the dashboard.

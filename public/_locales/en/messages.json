@@ -1,8 +1,11 @@
 {
   "appName": {
+    "message": "Tab Subtitles — Live Captions & Translation"
+  },
+  "appShortName": {
     "message": "Tab Subtitles"
   },
   "appDescription": {
-    "message": "Live captions for tab audio, with on-device translation, optional offline transcription, speaker colors, and SRT/VTT export."
+    "message": "Live subtitles for any video or call: speech to text on your device, translation, speaker colors, SRT/VTT export."
   }
 }
