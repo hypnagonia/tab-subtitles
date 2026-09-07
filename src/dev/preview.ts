@@ -100,7 +100,7 @@ const SCENES: Record<string, () => void> = {
     current = {
       ...base,
       capture: { status: 'active', tab: base.activeTab, error: null },
-      settings: { ...base.settings, mode: 'translate', language: 'en', translateTo: 'ru' },
+      settings: { ...base.settings, mode: 'translate', language: 'en', translateTo: 'es' },
       transcription: { ...base.transcription, status: 'running', active: 'chrome' },
     };
     // Every line is spoken in the source language here, so the screenshot
@@ -109,10 +109,10 @@ const SCENES: Record<string, () => void> = {
       ...segment,
       text: index === 3 ? 'So we started by looking at the list of tasks.' : segment.text,
       translation: [
-        'Сегодня мы обсудим новую архитектуру.',
-        'А что заставило вас переписать транспортный слой?',
-        'Каждое изменение задевало три сервиса сразу. В этом и была проблема.',
-        'Так что мы сначала посмотрели на список задач.',
+        'Hoy vamos a hablar de la nueva arquitectura.',
+        '¿Y qué os llevó a reescribir la capa de transporte?',
+        'Cada cambio tocaba tres servicios a la vez. Ese era todo el problema.',
+        'Así que empezamos mirando la lista de tareas.',
       ][index],
     }));
   },
