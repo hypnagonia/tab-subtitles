@@ -10,7 +10,7 @@ The same in every locale: the summary and description are translated, the name i
 
 **Summary (132 characters maximum):**
 
-Live subtitles for any video or call: speech to text on your device, translation, speaker colors, SRT/VTT export.
+Private live captions for any Chrome tab: on-device speech to text, translation, speaker colors, SRT/VTT export.
 
 Each locale has its own summary in `public/_locales/<locale>/messages.json`, written for what people search in that language rather than translated word for word.
 
@@ -28,9 +28,15 @@ Translation needs Chrome 138 or later; without it the option is simply unavailab
 
 **Detailed description:**
 
-Live subtitles for anything playing in a Chrome tab: video, lectures, calls, streams, podcasts. Speech becomes readable text as it is spoken, and can be translated into another language on your own machine as it goes.
+Private captions for your browser. Videos, meetings, podcasts and streams — transcribed, and translated, on your own machine. Speech becomes readable text as it is spoken, in the side panel and, if you want it, over the video itself.
 
 Click the toolbar icon on the tab you want to caption. Tab Subtitles opens in the side panel and starts listening — nothing to set up per site, no account, no upload, no file to prepare.
+
+You pick what the captions are for, not which speech engine makes them:
+
+- Quick — the fastest way to captions. Chrome listens, and the offline model steps in when it cannot.
+- Private — captions made on your machine and nowhere else, by Whisper in the browser.
+- Translate — captions with the translation under each line, translated on your machine.
 
 Works with any tab that plays sound:
 
@@ -40,16 +46,17 @@ Works with any tab that plays sound:
 - Podcasts and radio
 - Anything where you would rather read than listen, or need both
 
-Privacy note: Auto mode uses Chrome Speech Recognition first. Depending on your Chrome setup, Chrome may send captured tab audio to Google for transcription. Choose Offline model in settings before starting captions if you want transcription to stay on your device. Translation always runs on your device. Tab Subtitles has no account, analytics, advertising, or developer-operated server, and the developer does not receive your audio or transcripts.
+Privacy note: Quick and Translate use Chrome Speech Recognition first. Depending on your Chrome setup, Chrome may send captured tab audio to Google for transcription. Choose Private before starting captions if you want transcription to stay on your device. Translation always runs on your device. Tab Subtitles has no account, analytics, advertising, or developer-operated server, and the developer does not receive your audio or transcripts.
 
 Features:
 
 - Live captions in a focused side panel, in 17 spoken languages
+- Three modes — quick, private, translate — chosen in one tap in the panel
 - Optional captions over the page and in fullscreen video
-- Optional offline Whisper transcription
+- Fully offline Whisper transcription in Private mode
 - Speaker separation and speaker colors (on by default, switchable in settings)
 - Spoken language picked from the panel, switchable mid-session
-- Optional on-device translation, shown above the original line
+- On-device translation, shown under the original line
 - Adjustable typeface, text size, color, and timestamps
 - Copy transcripts or export TXT, SRT, and VTT files
 - No account, advertising, analytics, or cloud storage
@@ -102,6 +109,7 @@ Create live, readable captions and downloadable subtitle transcripts from audio 
 
 ## Distribution and support
 
+- Listing: `https://chromewebstore.google.com/detail/tab-subtitles/egbheogpojgfgidcjffloaepeefbfobd`
 - Visibility: Public
 - Regions: All regions unless support requirements dictate otherwise
 - Mature content: No
