@@ -2,7 +2,7 @@
 
 ## Product details
 
-**Name:** Tab Subtitles
+**Name:** Tab Subtitles — the same in every locale. The summary and description are translated; the name is a brand and is not.
 
 **Category:** Accessibility
 

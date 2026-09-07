@@ -1,6 +1,6 @@
 {
   "appName": {
-    "message": "Sottotitoli della scheda"
+    "message": "Tab Subtitles"
   },
   "appDescription": {
     "message": "Sottotitoli per l’audio delle schede, con traduzione sul dispositivo, modalità offline opzionale ed export SRT/VTT."

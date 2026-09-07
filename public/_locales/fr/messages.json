@@ -1,6 +1,6 @@
 {
   "appName": {
-    "message": "Sous-titres d’onglet"
+    "message": "Tab Subtitles"
   },
   "appDescription": {
     "message": "Sous-titres pour l’audio des onglets, avec traduction sur l’appareil, mode hors ligne facultatif et export SRT/VTT."
