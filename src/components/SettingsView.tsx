@@ -1,25 +1,17 @@
 import { Toggle } from './Toggle';
 import { UI_LANGUAGES, type Translate } from '../shared/i18n';
-import { COLORS, FONTS, FONT_SIZE, LANGUAGES, type Engine, type Settings } from '../shared/types';
-import { NO_TRANSLATION, translationSupported } from '../transcription/translator';
-
-const ENGINE_NOTE = {
-  auto: 'settings.engineAutoNote',
-  chrome: 'settings.engineChromeNote',
-  whisper: 'settings.engineWhisperNote',
-} as const;
+import { COLORS, FONTS, FONT_SIZE, type Settings } from '../shared/types';
 
 interface Props {
   settings: Settings;
   onChange: (patch: Partial<Settings>) => void;
-  /** Choosing a translation may have to fetch a model, which Chrome only
-   *  allows on the click that chose it. */
-  onTranslate: (translateTo: string) => void;
   onClose: () => void;
   t: Translate;
 }
 
-export function SettingsView({ settings, onChange, onTranslate, onClose, t }: Props) {
+/** Everything except the choice the panel itself asks for: what the subtitles
+ *  are for lives on the main screen, not behind a gear. */
+export function SettingsView({ settings, onChange, onClose, t }: Props) {
   const font = FONTS.find((option) => option.value === settings.font)!;
   const color = COLORS.find((option) => option.value === settings.color)!;
 
@@ -38,16 +30,6 @@ export function SettingsView({ settings, onChange, onTranslate, onClose, t }: Pr
         </p>
 
         <label className="field">
-          <span className="label">{t('settings.engine')}</span>
-          <select value={settings.engine} onChange={(event) => onChange({ engine: event.target.value as Engine })}>
-            <option value="auto">{t('settings.engineAuto')}</option>
-            <option value="chrome">{t('settings.engineChrome')}</option>
-            <option value="whisper">{t('settings.engineWhisper')}</option>
-          </select>
-        </label>
-        <p className="hint">{t(ENGINE_NOTE[settings.engine])}</p>
-
-        <label className="field">
           <span className="label">{t('settings.appLanguage')}</span>
           <select value={settings.uiLanguage} onChange={(event) => onChange({ uiLanguage: event.target.value })}>
             <option value="auto">{t('lang.auto')}</option>
@@ -58,23 +40,6 @@ export function SettingsView({ settings, onChange, onTranslate, onClose, t }: Pr
             ))}
           </select>
         </label>
-
-        <label className="field">
-          <span className="label">{t('settings.translation')}</span>
-          <select
-            value={settings.translateTo}
-            disabled={!translationSupported()}
-            onChange={(event) => onTranslate(event.target.value)}
-          >
-            <option value={NO_TRANSLATION}>{t('lang.noTranslation')}</option>
-            {LANGUAGES.filter((option) => option.code !== settings.language).map((option) => (
-              <option key={option.code} value={option.code}>
-                {option.flag} {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <p className="hint">{t('settings.translationNote')}</p>
 
         <label className="field">
           <span className="label">{t('settings.typeface')}</span>

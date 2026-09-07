@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { ModePicker } from '../components/ModePicker';
 import { Notice } from '../components/Notice';
 import { SettingsView } from '../components/SettingsView';
 import { Transcript } from '../components/Transcript';
@@ -15,7 +16,9 @@ import {
   DEFAULT_SETTINGS,
   DEFAULT_TRANSCRIPTION,
   LANGUAGES,
+  defaultTranslationTarget,
   type AppState,
+  type Mode,
   type Segment,
   type Settings,
 } from '../shared/types';
@@ -95,7 +98,7 @@ export function App() {
     if (availability === 'available') return;
     if (availability === 'unavailable') {
       setTranslationFailed(true);
-      await patchSettings({ translateTo: NO_TRANSLATION });
+      await patchSettings({ mode: 'quick', translateTo: NO_TRANSLATION });
       return;
     }
 
@@ -104,7 +107,7 @@ export function App() {
     setTranslationProgress(null);
     if (ready) return;
     setTranslationFailed(true);
-    await patchSettings({ translateTo: NO_TRANSLATION });
+    await patchSettings({ mode: 'quick', translateTo: NO_TRANSLATION });
   }, [patchSettings]);
 
   const { capture, activeTab, activeTabInvoked, settings, transcription } = state;
@@ -118,7 +121,28 @@ export function App() {
     },
     [ensureTranslation, patchSettings, state.settings.language],
   );
-  const t = useMemo(() => translator(resolveUiLanguage(settings.uiLanguage)), [settings.uiLanguage]);
+  const uiLanguage = useMemo(() => resolveUiLanguage(settings.uiLanguage), [settings.uiLanguage]);
+  const t = useMemo(() => translator(uiLanguage), [uiLanguage]);
+
+  /** Choosing to translate has to name a language as well, and fetch its model
+   *  on the very click that asked for it. The language a previous session
+   *  translated into is kept, so the mode can be left and come back to. */
+  const chooseMode = useCallback(
+    (mode: Mode) => {
+      if (mode !== 'translate') {
+        void patchSettings({ mode });
+        return;
+      }
+      const kept = settings.translateTo;
+      const translateTo =
+        kept !== NO_TRANSLATION && kept !== settings.language
+          ? kept
+          : defaultTranslationTarget(settings.language, uiLanguage);
+      void patchSettings({ mode, translateTo });
+      void ensureTranslation(settings.language, translateTo);
+    },
+    [ensureTranslation, patchSettings, settings.language, settings.translateTo, uiLanguage],
+  );
   const tab = capture.tab ?? activeTab;
   const live = capture.status === 'active';
   const starting = capture.status === 'starting';
@@ -176,9 +200,12 @@ export function App() {
               const language = event.target.value;
               // Translating a language into itself is nothing, and the picker
               // does not offer it, so the setting cannot be left pointing at it.
-              const translateTo = language === settings.translateTo ? NO_TRANSLATION : settings.translateTo;
+              const translateTo =
+                language === settings.translateTo
+                  ? defaultTranslationTarget(language, uiLanguage)
+                  : settings.translateTo;
               void patchSettings({ language, translateTo });
-              void ensureTranslation(language, translateTo);
+              if (settings.mode === 'translate') void ensureTranslation(language, translateTo);
             }}
           >
             {LANGUAGES.map((option) => (
@@ -215,15 +242,18 @@ export function App() {
       ) : null}
 
       {showSettings ? (
-        <SettingsView
-          settings={settings}
-          onChange={patchSettings}
-          onTranslate={chooseTranslation}
-          onClose={() => setShowSettings(false)}
-          t={t}
-        />
+        <SettingsView settings={settings} onChange={patchSettings} onClose={() => setShowSettings(false)} t={t} />
       ) : (
         <>
+          <ModePicker
+            settings={settings}
+            live={live}
+            active={transcription.active}
+            onMode={chooseMode}
+            onTranslate={chooseTranslation}
+            t={t}
+          />
+
           {capture.error ? (
             <Notice tone="error" action={activeTab ? <button onClick={start}>try again</button> : null}>
               {t(`error.${capture.error}` as never)}
