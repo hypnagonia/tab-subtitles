@@ -10,6 +10,18 @@
 
 Live captions for tab audio, with on-device translation, optional offline transcription, speaker colors, and SRT/VTT export.
 
+**What's new (0.2.0) — put at the top of the detailed description for this release:**
+
+What's new in 0.2.0
+
+- Translation on your own machine. Choose a language in settings and each line is translated as it is heard, using Chrome's built-in translator. Nothing is sent to a translation service. The line as it was spoken stays above the translation, and exports keep the original.
+- The spoken language now sits in the panel beside the settings icon, so it can be changed while captions are running instead of only before they start.
+- The old "auto" spoken language is gone. It guessed from the page or the browser rather than from the audio, and a wrong guess produced nonsense. The language is now always explicit, starting from your browser's language.
+- Click any line in the transcript to copy it.
+- Speaker separation and speaker colors are on by default.
+
+Translation needs Chrome 138 or later; without it the option is simply unavailable. Chrome downloads a translation model the first time each pair of languages is used.
+
 **Detailed description:**
 
 Turn audio playing in a Chrome tab into readable live subtitles. Click the toolbar icon on the tab you want to caption and Tab Subtitles opens in the side panel and starts listening.
