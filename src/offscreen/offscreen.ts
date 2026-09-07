@@ -5,12 +5,14 @@ import { needsChromeLanguageRestart } from '../transcription/config-change';
 import { Resampler16k } from '../transcription/resampler';
 import { RollingAudio } from '../transcription/rolling-audio';
 import { TranscriptionController } from '../transcription/controller';
+import { LiveTranslator, NO_TRANSLATION } from '../transcription/translator';
 import { toSw, type OffscreenCommand, type OffscreenEvent } from '../shared/messages';
-import type { ActiveEngine, Engine, ErrorCode } from '../shared/types';
+import type { ActiveEngine, Engine, ErrorCode, Segment } from '../shared/types';
 
 let language = 'en';
 let tag = 'en-US';
 let speakers = false;
+let translateTo = NO_TRANSLATION;
 let engine: Engine = 'auto';
 let active: ActiveEngine = null;
 let chromeSequence = 0;
@@ -20,6 +22,21 @@ let sessionStart = 0;
  *  kept here to take a voice print from. */
 const recent = new RollingAudio();
 const resampler = new Resampler16k();
+const translator = new LiveTranslator();
+
+/**
+ * The line goes out untranslated first and gains its translation a moment
+ * later, the same way a speaker colour catches up, so nothing waits on Chrome's
+ * translator to be read.
+ */
+async function translateLine(segment: Segment): Promise<void> {
+  const translated = await translator.translate(segment.text, language, translateTo);
+  if (!translated) return;
+  // The stored transcript holds the same object, so a panel opened later gets
+  // the translation with the line.
+  segment.translation = translated;
+  emit({ type: 'transcript:translation', id: segment.id, text: translated });
+}
 
 function emit(event: OffscreenEvent): void {
   chrome.runtime.sendMessage(toSw(event)).catch(() => undefined);
@@ -32,7 +49,10 @@ function setActive(next: ActiveEngine): void {
 }
 
 const transcription = new TranscriptionController({
-  onSegment: (segment) => emit({ type: 'transcript:segment', segment }),
+  onSegment: (segment) => {
+    emit({ type: 'transcript:segment', segment });
+    void translateLine(segment);
+  },
   onProgress: (progress) => emit({ type: 'model:progress', progress }),
   onPreparing: () => emit({ type: 'model:preparing' }),
   onReady: () => emit({ type: 'model:ready' }),
@@ -51,12 +71,14 @@ const transcription = new TranscriptionController({
 const chromeEngine = new ChromeEngine({
   onInterim: (text) => emit({ type: 'transcript:interim', text }),
   onFinal: (text, startedAt, endedAt) => {
-    const segment = { id: `c${++chromeSequence}`, time: startedAt, end: endedAt, text, speaker: null };
+    const segment: Segment = { id: `c${++chromeSequence}`, time: startedAt, end: endedAt, text, speaker: null };
     transcription.addExternal(segment);
     emit({ type: 'transcript:segment', segment });
     emit({ type: 'transcript:interim', text: '' });
-    // The line is on screen already; its colour catches up a moment later.
+    // The line is on screen already; its colour and translation catch up a
+    // moment later.
     void colourSpeaker(segment, startedAt, endedAt);
+    void translateLine(segment);
   },
   onUnavailable: (code) => {
     emit({ type: 'engine:unavailable', code });
@@ -120,6 +142,7 @@ async function teardown(): Promise<void> {
   pipe.setTapEnabled(false);
   chromeEngine.stop();
   transcription.stop();
+  translator.reset();
   recent.reset();
   resampler.reset();
   await pipe.stop();
@@ -173,6 +196,8 @@ chrome.runtime.onMessage.addListener((raw, _sender, sendResponse) => {
         tag = message.tag;
         speakers = message.speakers;
         engine = message.engine;
+        translateTo = message.translateTo;
+        translator.reset();
         transcription.configure(language, speakers);
         await startAudio(message.streamId);
         emit({ type: 'transcription:status', status: 'running' });
@@ -187,9 +212,13 @@ chrome.runtime.onMessage.addListener((raw, _sender, sendResponse) => {
 
       case 'config':
         const restartChrome = needsChromeLanguageRestart(active, tag, message.tag);
+        // A translator is made for one pair of languages, so either end moving
+        // means the next line needs a new one.
+        if (message.language !== language || message.translateTo !== translateTo) translator.reset();
         language = message.language;
         tag = message.tag;
         speakers = message.speakers;
+        translateTo = message.translateTo;
         transcription.configure(language, speakers);
         if (restartChrome) {
           chromeEngine.stop();

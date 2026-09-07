@@ -11,6 +11,7 @@ const base: AppState = {
     engine: 'auto',
     uiLanguage: 'auto',
     language: 'en',
+    translateTo: 'none',
     font: 'sans',
     fontSize: 17,
     color: 'white',
@@ -94,6 +95,24 @@ const SCENES: Record<string, () => void> = {
     };
     currentSegments = segments;
   },
+  translated: () => {
+    current = {
+      ...base,
+      capture: { status: 'active', tab: base.activeTab, error: null },
+      settings: { ...base.settings, language: 'en', translateTo: 'ru' },
+      transcription: { ...base.transcription, status: 'running', active: 'chrome' },
+    };
+    currentSegments = segments.map((segment, index) => ({
+      ...segment,
+      translation: [
+        'Сегодня мы обсудим новую архитектуру.',
+        'А что заставило вас переписать транспортный слой?',
+        'Каждое изменение задевало три сервиса сразу. В этом и была проблема.',
+        'So we started by looking at the list of tasks.',
+      ][index],
+    }));
+  },
+
   russian: () => {
     current = {
       ...base,

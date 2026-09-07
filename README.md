@@ -16,6 +16,7 @@ Live captions for audio playing in a Chrome tab. Subtitles appear in the side pa
 - Optional on-device Whisper transcription
 - Speaker separation and speaker colors, on by default
 - Spoken language picked from the panel, switchable mid-session
+- Optional live translation on device, shown above the original line
 - Adjustable typeface, size, color, and timestamps
 - TXT, SRT, and VTT export
 - No account, advertising, analytics, or cloud storage
@@ -44,6 +45,8 @@ Chrome requires the toolbar click before an extension can capture a tab. Protect
 | Auto | Uses Chrome recognition first and falls back to Whisper if unavailable. |
 | Chrome | May send tab audio to Google unless Chrome has its on-device language model installed. |
 | Offline model | Runs Whisper locally in the browser after an approximately 150 MB model download. |
+
+Translation uses Chrome's built-in Translator API (Chrome 138+). It runs on this machine once the language pair's model has been downloaded, and the transcript keeps the original: exports and copied lines are the words as they were spoken.
 
 Speaker separation is on by default and can be switched off in settings. It downloads an approximately 7 MB model on first use and processes speaker embeddings locally.
 

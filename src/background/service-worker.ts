@@ -68,7 +68,7 @@ function hydrate(): Promise<void> {
 
 let overlayInjected = false;
 let overlayRevision = 0;
-let overlayCurrent: { id: string; text: string; speaker: number | null } | null = null;
+let overlayCurrent: { id: string; text: string; speaker: number | null; translation: string | null } | null = null;
 
 function nextOverlayRevision(): number {
   overlayRevision = Math.max(overlayRevision + 1, Date.now());
@@ -97,14 +97,26 @@ function overlayStyle(speaker: number | null = null) {
   };
 }
 
-async function showOnPage(text: string, speaker: number | null = null, id: string | null = null): Promise<void> {
+async function showOnPage(
+  text: string,
+  speaker: number | null = null,
+  id: string | null = null,
+  translation: string | null = null,
+): Promise<void> {
   if (!state.settings.overlay || state.capture.status !== 'active') return;
   const revision = nextOverlayRevision();
   const tabId = state.capture.tab?.id;
   if (!tabId || !(await ensureOverlay())) return;
-  if (revision === overlayRevision) overlayCurrent = id ? { id, text, speaker } : null;
+  if (revision === overlayRevision) overlayCurrent = id ? { id, text, speaker, translation } : null;
   await chrome.tabs
-    .sendMessage(tabId, { type: 'overlay:show', text, style: overlayStyle(speaker), revision })
+    .sendMessage(tabId, {
+      type: 'overlay:show',
+      // The line as it was spoken leads, with its translation under it.
+      text,
+      sub: translation ?? '',
+      style: overlayStyle(speaker),
+      revision,
+    })
     .catch(() => {
       // The page navigated away from under the script; put it back next time.
       if (revision === overlayRevision) overlayInjected = false;
@@ -280,6 +292,7 @@ async function startSubtitles(tabId: number): Promise<void> {
       tag: tagFor(state.settings.language),
       speakers: state.settings.speakers,
       engine: state.settings.engine,
+      translateTo: state.settings.translateTo,
     });
     if (!result.ok) throw new Error(String(result.error ?? 'the audio engine did not start'));
 
@@ -413,13 +426,14 @@ chrome.runtime.onMessage.addListener((raw, _sender, sendResponse) => {
         await saveSettings(next);
         if (overlayOff) await hideOnPage();
         else if (next.overlay && overlayCurrent) {
-          await showOnPage(overlayCurrent.text, overlayCurrent.speaker, overlayCurrent.id);
+          await showOnPage(overlayCurrent.text, overlayCurrent.speaker, overlayCurrent.id, overlayCurrent.translation);
         }
         await tellOffscreen({
           type: 'config',
           language: next.language,
           tag: tagFor(next.language),
           speakers: next.speakers,
+          translateTo: next.translateTo,
         });
         pushState();
         sendResponse({ ok: true, state });
@@ -485,7 +499,12 @@ chrome.runtime.onMessage.addListener((raw, _sender, sendResponse) => {
 
       case 'transcript:segment':
         broadcast({ type: 'transcript:segment', segment: message.segment });
-        await showOnPage(message.segment.text, message.segment.speaker, message.segment.id);
+        await showOnPage(
+          message.segment.text,
+          message.segment.speaker,
+          message.segment.id,
+          message.segment.translation ?? null,
+        );
         return;
 
       case 'transcript:interim':
@@ -497,7 +516,16 @@ chrome.runtime.onMessage.addListener((raw, _sender, sendResponse) => {
         broadcast({ type: 'transcript:speaker', id: message.id, speaker: message.speaker });
         if (overlayCurrent?.id === message.id) {
           overlayCurrent.speaker = message.speaker;
-          await showOnPage(overlayCurrent.text, message.speaker, message.id);
+          await showOnPage(overlayCurrent.text, message.speaker, message.id, overlayCurrent.translation);
+        }
+        return;
+
+      case 'transcript:translation':
+        broadcast({ type: 'transcript:translation', id: message.id, text: message.text });
+        // Only the line still on the page is worth re-drawing.
+        if (overlayCurrent?.id === message.id) {
+          overlayCurrent.translation = message.text;
+          await showOnPage(overlayCurrent.text, overlayCurrent.speaker, message.id, message.text);
         }
         return;
 

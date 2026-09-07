@@ -19,6 +19,8 @@ export interface Settings {
   uiLanguage: string;
   /** The language being spoken, as a code from LANGUAGES. */
   language: string;
+  /** A code from LANGUAGES to translate the subtitles into, or 'none'. */
+  translateTo: string;
   font: FontChoice;
   /** Subtitle size in px. */
   fontSize: number;
@@ -34,6 +36,7 @@ export const DEFAULT_SETTINGS: Settings = {
   engine: 'auto',
   uiLanguage: 'auto',
   language: 'en',
+  translateTo: 'none',
   font: 'sans',
   fontSize: 17,
   color: 'white',
@@ -73,18 +76,18 @@ export const FONT_SIZE = { min: 13, max: 28 } as const;
 /** Languages offered in the picker. Whisper handles far more; these are the
  *  ones worth putting in a list this small. */
 export const LANGUAGES: { code: string; label: string; tag: string; flag: string }[] = [
-  { code: 'en', label: 'english', tag: 'en-US' , flag: '🇺🇸' },
-  { code: 'ru', label: 'русский', tag: 'ru-RU' , flag: '🇷🇺' },
-  { code: 'de', label: 'deutsch', tag: 'de-DE' , flag: '🇩🇪' },
-  { code: 'fr', label: 'français', tag: 'fr-FR' , flag: '🇫🇷' },
-  { code: 'es', label: 'español', tag: 'es-ES' , flag: '🇪🇸' },
-  { code: 'pt', label: 'português', tag: 'pt-PT' , flag: '🇵🇹' },
-  { code: 'it', label: 'italiano', tag: 'it-IT' , flag: '🇮🇹' },
-  { code: 'nl', label: 'nederlands', tag: 'nl-NL' , flag: '🇳🇱' },
-  { code: 'pl', label: 'polski', tag: 'pl-PL' , flag: '🇵🇱' },
-  { code: 'tr', label: 'türkçe', tag: 'tr-TR' , flag: '🇹🇷' },
-  { code: 'sv', label: 'svenska', tag: 'sv-SE' , flag: '🇸🇪' },
-  { code: 'cs', label: 'čeština', tag: 'cs-CZ' , flag: '🇨🇿' },
+  { code: 'en', label: 'English', tag: 'en-US' , flag: '🇺🇸' },
+  { code: 'ru', label: 'Русский', tag: 'ru-RU' , flag: '🇷🇺' },
+  { code: 'de', label: 'Deutsch', tag: 'de-DE' , flag: '🇩🇪' },
+  { code: 'fr', label: 'Français', tag: 'fr-FR' , flag: '🇫🇷' },
+  { code: 'es', label: 'Español', tag: 'es-ES' , flag: '🇪🇸' },
+  { code: 'pt', label: 'Português', tag: 'pt-PT' , flag: '🇵🇹' },
+  { code: 'it', label: 'Italiano', tag: 'it-IT' , flag: '🇮🇹' },
+  { code: 'nl', label: 'Nederlands', tag: 'nl-NL' , flag: '🇳🇱' },
+  { code: 'pl', label: 'Polski', tag: 'pl-PL' , flag: '🇵🇱' },
+  { code: 'tr', label: 'Türkçe', tag: 'tr-TR' , flag: '🇹🇷' },
+  { code: 'sv', label: 'Svenska', tag: 'sv-SE' , flag: '🇸🇪' },
+  { code: 'cs', label: 'Čeština', tag: 'cs-CZ' , flag: '🇨🇿' },
   { code: 'ar', label: 'العربية', tag: 'ar-SA' , flag: '🇸🇦' },
   { code: 'hi', label: 'हिन्दी', tag: 'hi-IN' , flag: '🇮🇳' },
   { code: 'ja', label: '日本語', tag: 'ja-JP' , flag: '🇯🇵' },
@@ -163,6 +166,9 @@ export interface Segment {
   text: string;
   /** 0-based speaker index, or null when voices are not being separated. */
   speaker: number | null;
+  /** The same line in the translation language, once Chrome has translated it.
+   *  The original is what the transcript keeps and what exports carry. */
+  translation?: string;
 }
 
 export const DEFAULT_TRANSCRIPTION: TranscriptionState = {

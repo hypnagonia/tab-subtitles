@@ -1,6 +1,7 @@
 import { Toggle } from './Toggle';
 import { UI_LANGUAGES, type Translate } from '../shared/i18n';
-import { COLORS, FONTS, FONT_SIZE, type Engine, type Settings } from '../shared/types';
+import { COLORS, FONTS, FONT_SIZE, LANGUAGES, type Engine, type Settings } from '../shared/types';
+import { NO_TRANSLATION, translationSupported } from '../transcription/translator';
 
 const ENGINE_NOTE = {
   auto: 'settings.engineAutoNote',
@@ -11,11 +12,14 @@ const ENGINE_NOTE = {
 interface Props {
   settings: Settings;
   onChange: (patch: Partial<Settings>) => void;
+  /** Choosing a translation may have to fetch a model, which Chrome only
+   *  allows on the click that chose it. */
+  onTranslate: (translateTo: string) => void;
   onClose: () => void;
   t: Translate;
 }
 
-export function SettingsView({ settings, onChange, onClose, t }: Props) {
+export function SettingsView({ settings, onChange, onTranslate, onClose, t }: Props) {
   const font = FONTS.find((option) => option.value === settings.font)!;
   const color = COLORS.find((option) => option.value === settings.color)!;
 
@@ -54,6 +58,23 @@ export function SettingsView({ settings, onChange, onClose, t }: Props) {
             ))}
           </select>
         </label>
+
+        <label className="field">
+          <span className="label">{t('settings.translation')}</span>
+          <select
+            value={settings.translateTo}
+            disabled={!translationSupported()}
+            onChange={(event) => onTranslate(event.target.value)}
+          >
+            <option value={NO_TRANSLATION}>{t('lang.noTranslation')}</option>
+            {LANGUAGES.filter((option) => option.code !== settings.language).map((option) => (
+              <option key={option.code} value={option.code}>
+                {option.flag} {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <p className="hint">{t('settings.translationNote')}</p>
 
         <label className="field">
           <span className="label">{t('settings.typeface')}</span>

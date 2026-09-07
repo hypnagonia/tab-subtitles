@@ -20,9 +20,10 @@ export type OffscreenCommand =
       tag: string;
       speakers: boolean;
       engine: Engine;
+      translateTo: string;
     }
   | { type: 'audio:stop' }
-  | { type: 'config'; language: string; tag: string; speakers: boolean }
+  | { type: 'config'; language: string; tag: string; speakers: boolean; translateTo: string }
   | { type: 'model:download'; speakers: boolean }
   | { type: 'transcript:get' }
   | { type: 'transcript:clear' };
@@ -38,6 +39,7 @@ export type OffscreenEvent =
   | { type: 'transcript:segment'; segment: Segment }
   | { type: 'transcript:interim'; text: string }
   | { type: 'transcript:speaker'; id: string; speaker: number }
+  | { type: 'transcript:translation'; id: string; text: string }
   | { type: 'engine:active'; active: ActiveEngine }
   | { type: 'engine:unavailable'; code: ErrorCode };
 
@@ -47,6 +49,7 @@ export type PanelEvent =
   | { type: 'transcript:segment'; segment: Segment }
   | { type: 'transcript:interim'; text: string }
   | { type: 'transcript:speaker'; id: string; speaker: number }
+  | { type: 'transcript:translation'; id: string; text: string }
   | { type: 'transcript:reset' };
 
 export type Envelope<T> = T & { target: 'sw' | 'offscreen' };

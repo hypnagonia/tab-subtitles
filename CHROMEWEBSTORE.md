@@ -23,11 +23,12 @@ Features:
 - Optional offline Whisper transcription
 - Speaker separation and speaker colors (on by default, switchable in settings)
 - Spoken language picked from the panel, switchable mid-session
+- Optional on-device translation, shown above the original line
 - Adjustable typeface, text size, color, and timestamps
 - Copy transcripts or export TXT, SRT, and VTT files
 - No account, advertising, analytics, or cloud storage
 
-Some protected pages and DRM-protected media cannot be captured. Offline transcription downloads approximately 150 MB of model data. Enabling speaker separation downloads an additional model of approximately 7 MB.
+Some protected pages and DRM-protected media cannot be captured. Offline transcription downloads approximately 150 MB of model data. Translation uses Chrome's built-in on-device translator and downloads a model for each language pair on first use. Enabling speaker separation downloads an additional model of approximately 7 MB.
 
 ## Graphic assets
 

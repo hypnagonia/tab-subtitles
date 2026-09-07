@@ -11,7 +11,8 @@ type OverlayStyle = {
 };
 
 type OverlayMessage =
-  | { type: 'overlay:show'; text: string; style: OverlayStyle; revision: number }
+  /** `sub` is the translation, shown under the spoken line. Empty otherwise. */
+  | { type: 'overlay:show'; text: string; sub?: string; style: OverlayStyle; revision: number }
   | { type: 'overlay:hide'; revision: number };
 
 const MARKER = '__tabSubtitlesOverlay';
@@ -32,28 +33,50 @@ if (!(window as any)[MARKER]) {
       padding: 0 4vw 6vh;
       pointer-events: none;
     }
-    .line {
+    .box {
       max-width: 46em;
-      margin: 0;
       padding: 0.25em 0.6em;
       border-radius: 4px;
       background: rgba(0, 0, 0, 0.72);
+    }
+    .box.empty {
+      display: none;
+    }
+    .line {
+      margin: 0;
       color: #fff;
       text-align: center;
       line-height: 1.35;
       text-wrap: balance;
       white-space: pre-wrap;
     }
-    .line:empty {
+    /* The translation of the line, under the line itself. */
+    .sub {
+      margin: 0.15em 0 0;
+      font-size: 0.72em;
+      opacity: 0.62;
+    }
+    .sub:empty {
       display: none;
     }
   `;
   const wrap = document.createElement('div');
   wrap.className = 'wrap';
+  const box = document.createElement('div');
+  box.className = 'box empty';
   const line = document.createElement('p');
   line.className = 'line';
-  wrap.appendChild(line);
+  const sub = document.createElement('p');
+  sub.className = 'line sub';
+  box.append(line, sub);
+  wrap.appendChild(box);
   shadow.append(style, wrap);
+
+  const draw = (text: string, translation: string): void => {
+    line.textContent = text;
+    sub.textContent = translation;
+    box.classList.toggle('empty', !text);
+  };
 
   let timer: ReturnType<typeof setTimeout> | null = null;
   let revision = 0;
@@ -75,19 +98,19 @@ if (!(window as any)[MARKER]) {
     if (message?.type === 'overlay:hide') {
       if (timer) clearTimeout(timer);
       timer = null;
-      line.textContent = '';
+      draw('', '');
       return;
     }
     attach();
-    line.style.fontFamily = message.style.font;
-    line.style.fontSize = `${message.style.size}px`;
-    line.style.color = message.style.color;
-    line.textContent = message.text;
+    box.style.fontFamily = message.style.font;
+    box.style.fontSize = `${message.style.size}px`;
+    box.style.color = message.style.color;
+    draw(message.text, message.sub ?? '');
 
     // Subtitles that never clear turn into litter over the video.
     if (timer) clearTimeout(timer);
     timer = setTimeout(() => {
-      line.textContent = '';
+      draw('', '');
     }, HIDE_AFTER_MS);
   });
 }

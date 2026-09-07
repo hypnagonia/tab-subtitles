@@ -32,13 +32,14 @@ export function Transcript({
     return () => clearTimeout(timer);
   }, [copiedId]);
 
-  /** A line is a quotable thing, so clicking one copies it. Dragging across it
+  /** A line is a quotable thing, so clicking one copies it — the line as it is
+   *  being read, which is the translation when there is one. Dragging across it
    *  is someone picking out a few words by hand, and is left alone. */
   async function copyLine(segment: Segment): Promise<void> {
     const selection = getSelection();
     if (selection && !selection.isCollapsed) return;
     try {
-      await navigator.clipboard.writeText(segment.text);
+      await navigator.clipboard.writeText(segment.translation ?? segment.text);
       setCopiedId(segment.id);
     } catch {
       // Clipboard refused, e.g. the panel lost focus mid-click.
@@ -90,6 +91,8 @@ export function Transcript({
               </div>
             ) : null}
             <p style={{ color: speakerColor(showSpeakers ? segment.speaker : null, settings.color) }}>{segment.text}</p>
+            {/* The translation follows the line it came from. */}
+            {segment.translation ? <p className="cue-translation">{segment.translation}</p> : null}
             {copiedId === segment.id ? <span className="cue-copied">{t('action.copied')}</span> : null}
           </div>
         ))

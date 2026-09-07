@@ -6,6 +6,12 @@ import { download, filenameFor, serialize, type Format } from '../lib/export';
 import { PANEL_PORT, toSw, type PanelCommand, type PanelEvent } from '../shared/messages';
 import { resolveUiLanguage, translator } from '../shared/i18n';
 import {
+  NO_TRANSLATION,
+  prepareTranslation,
+  translationAvailability,
+  translationSupported,
+} from '../transcription/translator';
+import {
   DEFAULT_SETTINGS,
   DEFAULT_TRANSCRIPTION,
   LANGUAGES,
@@ -32,6 +38,9 @@ export function App() {
   const [interim, setInterim] = useState('');
   const [showSettings, setShowSettings] = useState(false);
   const [copied, setCopied] = useState(false);
+  /** 0 – 1 while Chrome fetches a pair's translation model, else null. */
+  const [translationProgress, setTranslationProgress] = useState<number | null>(null);
+  const [translationFailed, setTranslationFailed] = useState(false);
 
 
   useEffect(() => {
@@ -43,6 +52,10 @@ export function App() {
       else if (event.type === 'transcript:speaker')
         setSegments((prev) =>
           prev.map((segment) => (segment.id === event.id ? { ...segment, speaker: event.speaker } : segment)),
+        );
+      else if (event.type === 'transcript:translation')
+        setSegments((prev) =>
+          prev.map((segment) => (segment.id === event.id ? { ...segment, translation: event.text } : segment)),
         );
       else if (event.type === 'transcript:reset') setSegments([]);
     });
@@ -68,7 +81,43 @@ export function App() {
     await send({ type: 'settings:set', patch });
   }, []);
 
+  /**
+   * Chrome only downloads a translation model on a user gesture, and the
+   * offscreen document never has one — so the click that picked the language is
+   * the moment to fetch it. Nothing is awaited before the check, or the gesture
+   * goes stale.
+   */
+  const ensureTranslation = useCallback(async (source: string, target: string) => {
+    setTranslationFailed(false);
+    if (target === NO_TRANSLATION || target === source || !translationSupported()) return;
+
+    const availability = await translationAvailability(source, target);
+    if (availability === 'available') return;
+    if (availability === 'unavailable') {
+      setTranslationFailed(true);
+      await patchSettings({ translateTo: NO_TRANSLATION });
+      return;
+    }
+
+    setTranslationProgress(0);
+    const ready = await prepareTranslation(source, target, setTranslationProgress);
+    setTranslationProgress(null);
+    if (ready) return;
+    setTranslationFailed(true);
+    await patchSettings({ translateTo: NO_TRANSLATION });
+  }, [patchSettings]);
+
   const { capture, activeTab, activeTabInvoked, settings, transcription } = state;
+
+  /** Picking a translation both saves it and, if Chrome needs one, fetches the
+   *  model for the pair — which only the click itself is allowed to start. */
+  const chooseTranslation = useCallback(
+    (translateTo: string) => {
+      void patchSettings({ translateTo });
+      void ensureTranslation(state.settings.language, translateTo);
+    },
+    [ensureTranslation, patchSettings, state.settings.language],
+  );
   const t = useMemo(() => translator(resolveUiLanguage(settings.uiLanguage)), [settings.uiLanguage]);
   const tab = capture.tab ?? activeTab;
   const live = capture.status === 'active';
@@ -123,7 +172,14 @@ export function App() {
             aria-label={t('settings.spokenLanguage')}
             title={t('settings.spokenLanguage')}
             value={settings.language}
-            onChange={(event) => patchSettings({ language: event.target.value })}
+            onChange={(event) => {
+              const language = event.target.value;
+              // Translating a language into itself is nothing, and the picker
+              // does not offer it, so the setting cannot be left pointing at it.
+              const translateTo = language === settings.translateTo ? NO_TRANSLATION : settings.translateTo;
+              void patchSettings({ language, translateTo });
+              void ensureTranslation(language, translateTo);
+            }}
           >
             {LANGUAGES.map((option) => (
               <option key={option.code} value={option.code}>
@@ -142,10 +198,27 @@ export function App() {
         </div>
       </header>
 
+      {/* Fetching a translation model is started from either screen, so it
+          reports from above both of them. */}
+      {translationFailed ? <Notice tone="error">{t('error.translationUnavailable')}</Notice> : null}
+
+      {translationProgress !== null ? (
+        <div className="stack banner">
+          <div className="row">
+            <span className="label">{t('model.translating')}</span>
+            <span className="value">{Math.round(translationProgress * 100)}%</span>
+          </div>
+          <div className="progress">
+            <i style={{ width: `${Math.max(2, translationProgress * 100)}%` }} />
+          </div>
+        </div>
+      ) : null}
+
       {showSettings ? (
         <SettingsView
           settings={settings}
           onChange={patchSettings}
+          onTranslate={chooseTranslation}
           onClose={() => setShowSettings(false)}
           t={t}
         />

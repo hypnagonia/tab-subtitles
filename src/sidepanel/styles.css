@@ -95,8 +95,8 @@ body {
 
 /* Narrow enough to leave the host room, wide enough to read the language. */
 select.lang {
-  max-width: 118px;
-  padding: 5px 6px;
+  max-width: 122px;
+  padding-left: 7px;
   text-overflow: ellipsis;
 }
 
@@ -148,6 +148,13 @@ select.lang {
   .dot[data-tone='busy'] {
     animation: none;
   }
+}
+
+/* Status that belongs to neither screen in particular, e.g. a translation
+   model being fetched from the settings sheet. */
+.stack.banner {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--hairline);
 }
 
 /* --- subtitles ---------------------------------------------------------- */
@@ -224,6 +231,14 @@ select.lang {
   opacity: 0.5;
 }
 
+/* The translation, kept under the line it came from. */
+.cue-translation {
+  margin: 2px 0 0;
+  font-size: 0.78em;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
 .empty {
   margin: 0;
   color: var(--dim);
@@ -261,10 +276,17 @@ button:disabled {
 }
 
 button:focus-visible,
-input:focus-visible,
-select:focus-visible {
+input:focus-visible {
   outline: 2px solid var(--text);
   outline-offset: 2px;
+}
+
+/* A select is a box already; a ring around it reads like an error. It lights
+   its own border instead, so keyboard focus is still visible. */
+select:focus,
+select:focus-visible {
+  outline: none;
+  border-color: var(--muted);
 }
 
 button.primary {
@@ -377,14 +399,25 @@ button.icon[aria-pressed='true'] {
   color: var(--muted);
 }
 
+/* The arrow Chrome draws cannot be placed, so it is turned off and drawn here
+   instead: clear of the right border, centred on the text beside it. */
 select {
+  appearance: none;
   font: inherit;
   font-size: 12px;
+  line-height: 18px;
   color: var(--muted);
-  background: var(--raised);
+  background-color: var(--raised);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7' fill='none'><path d='M1 1.5L5 5.4L9 1.5' stroke='%238b8e93' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
   border: 1px solid var(--hairline);
   border-radius: var(--radius);
-  padding: 6px 8px;
+  padding: 5px 30px 5px 9px;
+}
+
+select:disabled {
+  opacity: 0.5;
 }
 
 select:hover {
