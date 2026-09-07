@@ -102,13 +102,16 @@ const SCENES: Record<string, () => void> = {
       settings: { ...base.settings, language: 'en', translateTo: 'ru' },
       transcription: { ...base.transcription, status: 'running', active: 'chrome' },
     };
+    // Every line is spoken in the source language here, so the screenshot
+    // reads as one conversation being translated in one direction.
     currentSegments = segments.map((segment, index) => ({
       ...segment,
+      text: index === 3 ? 'So we started by looking at the list of tasks.' : segment.text,
       translation: [
         'Сегодня мы обсудим новую архитектуру.',
         'А что заставило вас переписать транспортный слой?',
         'Каждое изменение задевало три сервиса сразу. В этом и была проблема.',
-        'So we started by looking at the list of tasks.',
+        'Так что мы сначала посмотрели на список задач.',
       ][index],
     }));
   },

@@ -3,6 +3,6 @@
     "message": "Tab Subtitles"
   },
   "appDescription": {
-    "message": "Live captions for tab audio, with optional offline transcription, subtitle overlays, speaker colors, and SRT/VTT export."
+    "message": "Live captions for tab audio, with on-device translation, optional offline transcription, speaker colors, and SRT/VTT export."
   }
 }

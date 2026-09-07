@@ -3,6 +3,6 @@
     "message": "Tab-Untertitel"
   },
   "appDescription": {
-    "message": "Live-Untertitel für Tab-Audio mit optionaler Offline-Erkennung, Seiten-Overlay, Sprecherfarben und SRT/VTT-Export."
+    "message": "Live-Untertitel für Tab-Audio mit Übersetzung auf dem Gerät, optionaler Offline-Erkennung, Sprecherfarben und SRT/VTT-Export."
   }
 }

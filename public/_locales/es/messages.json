@@ -3,6 +3,6 @@
     "message": "Subtítulos de pestaña"
   },
   "appDescription": {
-    "message": "Subtítulos para el audio de pestañas, con modo sin conexión opcional, superposición, colores de voz y exportación SRT/VTT."
+    "message": "Subtítulos para el audio de pestañas, con traducción en el dispositivo, modo sin conexión opcional y exportación SRT/VTT."
   }
 }

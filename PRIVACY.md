@@ -6,7 +6,7 @@ Tab Subtitles creates live captions from audio playing in a browser tab selected
 
 ## Information handled
 
-When the user starts captions, the extension handles audio from the selected tab and the transcript produced from that audio. It also reads the selected tab’s title, URL/host, audio state, and declared page language to identify the caption session and choose a recognition language. Audio or text may contain personal communications or other personal information depending on what the user chooses to caption.
+When the user starts captions, the extension handles audio from the selected tab and the transcript produced from that audio. It also reads the selected tab’s title, URL/host, and audio state to identify the caption session. Audio or text may contain personal communications or other personal information depending on what the user chooses to caption.
 
 The extension stores preferences such as recognition engine, language, subtitle appearance, and feature switches in Chrome local storage. It stores the active tab identifier and invocation state in Chrome session storage while needed for the current browser session.
 
@@ -18,7 +18,7 @@ This information is used only to create live captions, optionally distinguish sp
 
 In Auto or Chrome mode, Tab Subtitles uses Chrome Speech Recognition. Depending on the user’s Chrome installation and language model availability, Chrome may transmit tab audio to Google for transcription. That processing is governed by Google’s applicable terms and privacy policy. The extension UI identifies whether Chrome reports the active recognizer as cloud-based or on-device.
 
-In Offline model mode, speech recognition runs locally in the browser. Optional speaker separation also runs locally. Optional translation uses Chrome's built-in Translator, which runs on the device after Chrome downloads the language pair's model; transcripts are not sent to a translation service. Enabling these features downloads machine-learning model files from Hugging Face over HTTPS; audio and transcripts are not sent to Hugging Face.
+In Offline model mode, speech recognition runs locally in the browser. Optional speaker separation also runs locally. Optional translation uses Chrome’s built-in Translator, which runs on the device after Chrome downloads the language pair’s model; transcripts are not sent to a translation service. Enabling these features downloads machine-learning model files from Hugging Face over HTTPS; audio and transcripts are not sent to Hugging Face.
 
 The developer does not operate a backend for Tab Subtitles and does not receive, collect, sell, or use tab audio, transcripts, browsing information, or settings for advertising or analytics. Information is not shared with third parties except for Chrome/Google processing described above when the user chooses Auto or Chrome mode.
 

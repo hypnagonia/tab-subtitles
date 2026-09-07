@@ -41,6 +41,7 @@ for (const [name, expected] of [
   ['promo-marquee-1400x560.png', '1400x560'],
   ['screenshot-1-live.png', '1280x800'],
   ['screenshot-2-settings.png', '1280x800'],
+  ['screenshot-3-translation.png', '1280x800'],
 ]) {
   check(dimensions(resolve(MEDIA, name)).join('x') === expected, `${name} is ${expected}`);
 }

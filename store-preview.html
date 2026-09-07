@@ -25,6 +25,8 @@
       .program strong { display: block; font-size: 19px; font-weight: 600; }
       .program span { color: #7e878d; font-size: 12px; }
       .caption { position: absolute; left: 50%; bottom: 52px; transform: translateX(-50%); max-width: 720px; padding: 10px 18px; border-radius: 5px; background: rgba(0,0,0,.78); color: #fff; font-size: 25px; line-height: 1.35; text-align: center; white-space: nowrap; }
+      .caption .sub { display: none; margin-top: 4px; font-size: 18px; opacity: .62; }
+      body.translated .caption .sub { display: block; }
       .wave { position: absolute; left: 30px; right: 30px; bottom: 20px; height: 2px; background: linear-gradient(90deg, transparent, #19bfea, #efc31c, #65dc79, transparent); opacity: .65; }
       iframe { width: 405px; height: 100%; border: 0; border-left: 1px solid #2a2a2d; background: #000; }
     </style>
@@ -40,18 +42,29 @@
         <div class="halo"></div>
         <div class="program"><strong>The Interview</strong><span>Product conversation · live</span></div>
         <div class="stage"><div class="person"></div><div class="person alt"></div></div>
-        <div class="caption">Every change touched three services at once.</div>
+        <div class="caption">
+          Every change touched three services at once.
+          <div class="sub">Каждое изменение задевало три сервиса сразу.</div>
+        </div>
         <div class="wave"></div>
       </section>
       <iframe id="panel" src="/preview.html" title="Tab Subtitles side panel"></iframe>
     </main>
     <script>
+      // ?settings shows the settings sheet, ?scene=translated the translated
+      // transcript; without either, the panel keeps its own live scene.
       const panel = document.getElementById('panel');
       panel.addEventListener('load', () => {
-        if (!new URLSearchParams(location.search).has('settings')) return;
+        const params = new URLSearchParams(location.search);
+        const settings = params.has('settings');
+        const scene = params.get('scene');
+        if (!settings && !scene) return;
+        if (scene === 'translated') document.body.classList.add('translated');
         setTimeout(() => {
-          panel.contentWindow?.__scene?.('settings');
-          setTimeout(() => panel.contentDocument?.querySelector('button[aria-label="settings"]')?.click(), 150);
+          panel.contentWindow?.__scene?.(settings ? 'settings' : scene);
+          if (settings) {
+            setTimeout(() => panel.contentDocument?.querySelector('button[aria-label="settings"]')?.click(), 150);
+          }
         }, 500);
       });
     </script>

@@ -8,7 +8,7 @@
 
 **Summary (132 characters maximum):**
 
-Live captions for tab audio, with optional offline transcription, subtitle overlays, speaker colors, and SRT/VTT export.
+Live captions for tab audio, with on-device translation, optional offline transcription, speaker colors, and SRT/VTT export.
 
 **Detailed description:**
 
@@ -35,6 +35,7 @@ Some protected pages and DRM-protected media cannot be captured. Offline transcr
 - Store icon: `store/media/icon-128.png` (the same artwork is packaged at `dist/icons/icon-128.png`)
 - Screenshot — live captions: `store/media/screenshot-1-live.png`
 - Screenshot — settings: `store/media/screenshot-2-settings.png`
+- Screenshot — translation: `store/media/screenshot-3-translation.png`
 - Small promo tile: `store/media/promo-small-440x280.png`
 - Optional marquee: `store/media/promo-marquee-1400x560.png`
 
@@ -54,19 +55,19 @@ Create live, readable captions and downloadable subtitle transcripts from audio 
 - `storage`: Saves only extension settings, model-ready state, and short-lived session state needed to restore an active capture after the service worker sleeps.
 - `activeTab`: Grants user-initiated access to the specific tab selected by clicking the toolbar icon. The extension requests no blanket host access.
 - `tabs`: Reads the selected tab title, URL/host, and audio state to identify the captioned tab and stop cleanly if it closes or changes.
-- `scripting`: Reads the selected page’s declared language and, only when enabled, injects the on-page subtitle overlay into that user-selected tab.
+- `scripting`: Injects the on-page subtitle overlay into the user-selected tab, and only when that option is enabled.
 
 **Remote code:** No, the extension does not use remote code. JavaScript and WebAssembly are packaged in the ZIP. The optional ONNX speech and speaker models are downloaded as data and do not add extension logic.
 
 **User data categories to disclose:**
 
-- Website content: audio from the user-selected tab and the generated transcript; the page’s declared language is also read.
+- Website content: audio from the user-selected tab and the generated transcript.
 - Web history: the selected tab’s URL/host and title are read locally only to identify the active caption session.
 - Personal communications: may be present if the user chooses to caption a call or other communication.
 
 **Data-use certification:**
 
-- Data is used only to provide live captions, speaker separation, and user-requested exports.
+- Data is used only to provide live captions, speaker separation, on-device translation, and user-requested exports.
 - Data is not sold, used for advertising, used for creditworthiness or lending, or shared for unrelated purposes.
 - The developer does not allow humans to read captured audio or transcripts.
 - Use of information received from Google APIs follows the Chrome Web Store User Data Policy, including Limited Use requirements.
@@ -84,11 +85,12 @@ Create live, readable captions and downloadable subtitle transcripts from audio 
 
 ## Submission checklist
 
-- [ ] Test `release/tab-subtitles-0.1.0.zip` as an unpacked extension in a clean Chrome profile.
+- [ ] Test `release/tab-subtitles-0.2.0.zip` as an unpacked extension in a clean Chrome profile.
 - [ ] Confirm Auto mode’s cloud-processing disclosure is prominent in the listing.
+- [ ] Re-shoot both screenshots from `store-preview.html` whenever the panel changes.
 - [ ] Publish the privacy policy and add its HTTPS URL to the dashboard.
 - [ ] Add the detailed description and select Accessibility.
-- [ ] Upload the icon, two screenshots, small promo tile, and optional marquee.
+- [ ] Upload the icon, three screenshots, small promo tile, and optional marquee.
 - [ ] Complete every permission justification exactly and consistently with the privacy policy.
 - [ ] Select “No” for remote code.
 - [ ] Disclose website content, web history, and personal communications conservatively.
