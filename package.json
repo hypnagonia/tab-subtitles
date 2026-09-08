@@ -1,7 +1,7 @@
 {
   "name": "tab-subtitles",
   "private": true,
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Tab Subtitles — live on-device subtitles for the current tab.",
   "type": "module",
   "homepage": "https://jenyadoesapps.com",
