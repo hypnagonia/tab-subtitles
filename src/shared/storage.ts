@@ -9,13 +9,13 @@ export async function loadSettings(): Promise<Settings> {
   const { mode, ...rest } = saved ?? {};
   const settings = { ...DEFAULT_SETTINGS, ...rest };
   // Settings briefly named what the captions were for instead of a recogniser.
-  // An install carrying one of those gets the engine its mode implied, and only
-  // translates if that is what it was actually doing: the translating mode kept
-  // a language while it was switched off, and reading it back would turn
-  // translation on for someone who had turned it off.
+  // An install carrying one of those gets the engine its mode implied, and no
+  // translation: a mode kept a target language whether or not it was
+  // translating, so the language it carries says nothing about what was wanted.
+  // Translation starts from none, the same as a fresh install.
   if (mode !== undefined) {
     settings.engine = mode === 'private' ? 'whisper' : 'auto';
-    if (mode !== 'translate') settings.translateTo = DEFAULT_SETTINGS.translateTo;
+    settings.translateTo = DEFAULT_SETTINGS.translateTo;
   }
   // Spoken language used to have an 'auto' setting that only ever guessed. An
   // install carrying it, or anything else we no longer offer, starts from the
