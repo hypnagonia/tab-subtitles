@@ -32,11 +32,13 @@ Private captions for your browser. Videos, meetings, podcasts and streams — tr
 
 Click the toolbar icon on the tab you want to caption. Tab Subtitles opens in the side panel and starts listening — nothing to set up per site, no account, no upload, no file to prepare.
 
-You pick what the captions are for, not which speech engine makes them:
+Settings decide how the captions are made:
 
-- Quick — the fastest way to captions. Chrome listens, and the offline model steps in when it cannot.
-- Private — captions made on your machine and nowhere else, by Whisper in the browser.
-- Translate — captions with the translation under each line, translated on your machine.
+- Auto — the fastest way to captions. Chrome listens, and the offline model steps in when it cannot.
+- Chrome — Chrome's own recognizer only.
+- Offline model — captions made on your machine and nowhere else, by Whisper in the browser.
+
+Translation is a separate setting: pick a language and each line is translated on your machine, under the words as they were spoken.
 
 Works with any tab that plays sound:
 
@@ -46,14 +48,13 @@ Works with any tab that plays sound:
 - Podcasts and radio
 - Anything where you would rather read than listen, or need both
 
-Privacy note: Quick and Translate use Chrome Speech Recognition first. Depending on your Chrome setup, Chrome may send captured tab audio to Google for transcription. Choose Private before starting captions if you want transcription to stay on your device. Translation always runs on your device. Tab Subtitles has no account, analytics, advertising, or developer-operated server, and the developer does not receive your audio or transcripts.
+Privacy note: Auto and Chrome use Chrome Speech Recognition. Depending on your Chrome setup, Chrome may send captured tab audio to Google for transcription. Choose the offline model in settings before starting captions if you want transcription to stay on your device. Translation always runs on your device. Tab Subtitles has no account, analytics, advertising, or developer-operated server, and the developer does not receive your audio or transcripts.
 
 Features:
 
 - Live captions in a focused side panel, in 17 spoken languages
-- Three modes — quick, private, translate — chosen in one tap in the panel
 - Optional captions over the page and in fullscreen video
-- Fully offline Whisper transcription in Private mode
+- Fully offline Whisper transcription with the offline model
 - Speaker separation and speaker colors (on by default, switchable in settings)
 - Spoken language picked from the panel, switchable mid-session
 - On-device translation, shown under the original line

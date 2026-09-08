@@ -8,7 +8,7 @@ const base: AppState = {
   activeTab: { id: 1, title: 'The Interview', host: 'media.example', audible: true },
   activeTabInvoked: true,
   settings: {
-    mode: 'quick',
+    engine: 'auto',
     uiLanguage: 'auto',
     language: 'en',
     translateTo: 'none',
@@ -65,8 +65,7 @@ const SCENES: Record<string, () => void> = {
     current = {
       ...base,
       capture: { status: 'active', tab: base.activeTab, error: null },
-      // The private mode, which is what "listening · on device" means.
-      settings: { ...base.settings, mode: 'private', speakers: true, overlay: true },
+      settings: { ...base.settings, speakers: true, overlay: true },
       transcription: { ...base.transcription, status: 'running', active: 'whisper' },
     };
     currentSegments = segments;
@@ -100,7 +99,7 @@ const SCENES: Record<string, () => void> = {
     current = {
       ...base,
       capture: { status: 'active', tab: base.activeTab, error: null },
-      settings: { ...base.settings, mode: 'translate', language: 'en', translateTo: 'es' },
+      settings: { ...base.settings, language: 'en', translateTo: 'es' },
       transcription: { ...base.transcription, status: 'running', active: 'chrome' },
     };
     // Every line is spoken in the source language here, so the screenshot

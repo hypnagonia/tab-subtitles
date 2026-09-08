@@ -16,24 +16,24 @@ Videos, meetings, podcasts and streams — transcribed and translated on your ow
     <td width="50%"><img src="store/media/screenshot-3-translation.png" alt="Each line translated on the same machine" width="100%"></td>
   </tr>
   <tr>
-    <td align="center"><sub><b>private</b> — nothing leaves the machine</sub></td>
-    <td align="center"><sub><b>translate</b> — the translation under each line</sub></td>
+    <td align="center"><sub><b>offline model</b> — nothing leaves the machine</sub></td>
+    <td align="center"><sub><b>translation</b> — under each line, on this machine</sub></td>
   </tr>
 </table>
 
 </div>
 
-## Three modes, no engine picker
+## Engine and translation
 
-You choose what the captions are for. Which recogniser answers, and whether anything is translated, follows from that.
+Which recogniser listens, and whether anything is translated, are chosen in settings, behind the gear.
 
-| Mode | What you get |
+| Engine | What you get |
 | --- | --- |
-| **quick** | The fastest way to captions. Chrome listens, and the offline model steps in when it cannot. |
-| **private** | Captions made on this machine and nowhere else, by Whisper in the browser. The first run downloads about 150 MB. |
-| **translate** | Captions with the translation under each line, translated on this machine by Chrome's built-in translator. |
+| **auto** | The fastest way to captions. Chrome listens, and the offline model steps in when it cannot. |
+| **chrome** | Chrome's own recogniser only. It uses Google's servers unless Chrome's on-device model is installed. |
+| **offline model** | Captions made on this machine and nowhere else, by Whisper in the browser. The first run downloads about 150 MB. |
 
-The mode sits under the header, next to the spoken language — the two things worth changing without opening settings. Everything else (typeface, size, colour, timestamps, speaker colours, on-page overlay) lives behind the gear.
+Translation is its own setting: pick a language and each line is translated on this machine, shown under the words as they were spoken. Typeface, size, colour, timestamps, speaker colours, and the on-page overlay live behind the gear too. Only the spoken language sits in the panel itself, so it can be changed mid-session.
 
 ## Features
 
@@ -48,11 +48,11 @@ The mode sits under the header, next to the spoken language — the two things w
 
 ## Recognition and privacy
 
-| Mode | Processing |
+| Engine | Processing |
 | --- | --- |
-| quick | Chrome recognition first, which may send tab audio to Google unless Chrome's on-device language model is installed. Falls back to Whisper. |
-| private | Whisper only, in this browser, after an approximately 150 MB model download. Nothing leaves the machine. |
-| translate | Recognition as in quick; translation always on this machine. |
+| auto | Chrome recognition first, which may send tab audio to Google unless Chrome's on-device language model is installed. Falls back to Whisper. |
+| chrome | Chrome recognition only, which may send tab audio to Google unless Chrome's on-device language model is installed. |
+| offline model | Whisper only, in this browser, after an approximately 150 MB model download. Nothing leaves the machine. |
 
 Translation uses Chrome's built-in Translator API (Chrome 138+). It runs locally once the language pair's model has been downloaded, and the transcript keeps the original: exports and copied lines are the words as they were spoken.
 

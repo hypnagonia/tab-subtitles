@@ -10,45 +10,16 @@ export interface TabInfo {
 export type FontChoice = 'sans' | 'grotesk' | 'serif' | 'mono';
 export type ColorChoice = 'white' | 'yellow' | 'cyan' | 'green';
 
-/** Which recogniser does the work. Chosen for the user by the mode, never
- *  by the user: nobody opens a subtitle panel wanting a recogniser. */
+/** Which recogniser does the work. */
 export type Engine = 'auto' | 'chrome' | 'whisper';
 
-/** What the user came here for. The mode is the only choice the panel asks
- *  them to make, and everything else — recogniser, translation — follows. */
-export type Mode = 'quick' | 'private' | 'translate';
-
-export const MODES: Mode[] = ['quick', 'private', 'translate'];
-
-const MODE_VALUES = new Set<string>(MODES);
-
-export function isMode(value: unknown): value is Mode {
-  return typeof value === 'string' && MODE_VALUES.has(value);
-}
-
-/** The offline model is the only recogniser that never reaches a server, so it
- *  is what privacy means here. The other modes take whichever is quicker. */
-export function engineFor(mode: Mode): Engine {
-  return mode === 'private' ? 'whisper' : 'auto';
-}
-
-/** The language to translate into, which only the translating mode asks for.
- *  The others keep the choice; they simply do not act on it. */
-export function translationTarget(settings: Settings): string {
-  return settings.mode === 'translate' ? settings.translateTo : NO_TRANSLATION;
-}
-
-/** The value translation settings carry when no translation is wanted. */
-export const NO_TRANSLATION = 'none';
-
 export interface Settings {
-  mode: Mode;
+  engine: Engine;
   /** Interface language: a code, or 'auto' to follow the browser. */
   uiLanguage: string;
   /** The language being spoken, as a code from LANGUAGES. */
   language: string;
-  /** A code from LANGUAGES to translate the subtitles into, or 'none'. Only
-   *  the translating mode acts on it. */
+  /** A code from LANGUAGES to translate the subtitles into, or 'none'. */
   translateTo: string;
   font: FontChoice;
   /** Subtitle size in px. */
@@ -62,7 +33,7 @@ export interface Settings {
 }
 
 export const DEFAULT_SETTINGS: Settings = {
-  mode: 'quick',
+  engine: 'auto',
   uiLanguage: 'auto',
   language: 'en',
   translateTo: 'none',
@@ -135,13 +106,6 @@ export const LANGUAGE_CODES = new Set(LANGUAGES.map((language) => language.code)
 export function initialLanguage(browserLanguage: string | undefined | null): string {
   const code = (browserLanguage ?? '').trim().toLowerCase().split(/[-_]/)[0];
   return LANGUAGE_CODES.has(code) ? code : 'en';
-}
-
-/** A translation target that is not the language being spoken: the interface
- *  language when it differs, else English, else anything else on the list. */
-export function defaultTranslationTarget(spoken: string, uiLanguage: string): string {
-  const preferred = [uiLanguage, 'en', ...LANGUAGES.map((language) => language.code)];
-  return preferred.find((code) => LANGUAGE_CODES.has(code) && code !== spoken) ?? NO_TRANSLATION;
 }
 
 export type ModelStatus = 'absent' | 'downloading' | 'preparing' | 'ready' | 'error';

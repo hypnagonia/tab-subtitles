@@ -8,14 +8,6 @@
  * pile up behind the limit are dropped: an untranslated line beats a late one.
  */
 
-// The tests run this file straight from source, where Node resolves nothing
-// without the extension.
-import { NO_TRANSLATION } from '../shared/types.ts';
-
-/** The value a translation setting carries when no translation is wanted. It
- *  belongs with the settings; this module passes it on to its own callers. */
-export { NO_TRANSLATION };
-
 export type Availability = 'available' | 'downloadable' | 'downloading' | 'unavailable';
 
 export interface TranslatorInstance {
@@ -32,6 +24,8 @@ export interface TranslatorApi {
   }): Promise<TranslatorInstance>;
 }
 
+/** The value the picker carries when translation is switched off. */
+export const NO_TRANSLATION = 'none';
 
 /** Lines waiting on the translator before new ones are dropped. */
 const MAX_PENDING = 2;

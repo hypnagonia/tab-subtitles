@@ -1,40 +1,27 @@
-import {
-  DEFAULT_SETTINGS,
-  LANGUAGE_CODES,
-  NO_TRANSLATION,
-  initialLanguage,
-  isMode,
-  type Engine,
-  type Settings,
-} from './types';
+import { DEFAULT_SETTINGS, LANGUAGE_CODES, initialLanguage, type Settings } from './types';
 
 const KEY_SETTINGS = 'settings';
 const KEY_MODEL_READY = 'modelReady';
 
 export async function loadSettings(): Promise<Settings> {
   const stored = await chrome.storage.local.get(KEY_SETTINGS);
-  const saved = stored[KEY_SETTINGS] as (Partial<Settings> & { engine?: Engine }) | undefined;
-  const settings = { ...DEFAULT_SETTINGS, ...saved };
+  const saved = stored[KEY_SETTINGS] as (Partial<Settings> & { mode?: string }) | undefined;
+  const { mode, ...rest } = saved ?? {};
+  const settings = { ...DEFAULT_SETTINGS, ...rest };
+  // Settings briefly named what the captions were for instead of a recogniser.
+  // An install carrying one of those gets the engine its mode implied, and only
+  // translates if that is what it was actually doing: the translating mode kept
+  // a language while it was switched off, and reading it back would turn
+  // translation on for someone who had turned it off.
+  if (mode !== undefined) {
+    settings.engine = mode === 'private' ? 'whisper' : 'auto';
+    if (mode !== 'translate') settings.translateTo = DEFAULT_SETTINGS.translateTo;
+  }
   // Spoken language used to have an 'auto' setting that only ever guessed. An
   // install carrying it, or anything else we no longer offer, starts from the
   // browser's own language instead.
   if (!LANGUAGE_CODES.has(settings.language)) {
     settings.language = initialLanguage(chrome.i18n?.getUILanguage?.());
-  }
-  // Settings used to name a recogniser. An install carrying one keeps what it
-  // was after, rather than what it had picked to get there.
-  if (!isMode(settings.mode)) {
-    settings.mode =
-      saved?.engine === 'whisper'
-        ? 'private'
-        : settings.translateTo !== NO_TRANSLATION
-          ? 'translate'
-          : 'quick';
-  }
-  // Translating into nothing, or into the language already being spoken, is
-  // just captions.
-  if (settings.mode === 'translate' && (settings.translateTo === NO_TRANSLATION || settings.translateTo === settings.language)) {
-    settings.mode = 'quick';
   }
   return settings;
 }

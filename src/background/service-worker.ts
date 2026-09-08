@@ -12,10 +12,8 @@ import {
   DEFAULT_SETTINGS,
   DEFAULT_TRANSCRIPTION,
   FONTS,
-  engineFor,
   speakerColor,
   tagFor,
-  translationTarget,
   type AppState,
   type ErrorCode,
   type Segment,
@@ -293,8 +291,8 @@ async function startSubtitles(tabId: number): Promise<void> {
       language: state.settings.language,
       tag: tagFor(state.settings.language),
       speakers: state.settings.speakers,
-      engine: engineFor(state.settings.mode),
-      translateTo: translationTarget(state.settings),
+      engine: state.settings.engine,
+      translateTo: state.settings.translateTo,
     });
     if (!result.ok) throw new Error(String(result.error ?? 'the audio engine did not start'));
 
@@ -435,7 +433,7 @@ chrome.runtime.onMessage.addListener((raw, _sender, sendResponse) => {
           language: next.language,
           tag: tagFor(next.language),
           speakers: next.speakers,
-          translateTo: translationTarget(next),
+          translateTo: next.translateTo,
         });
         pushState();
         sendResponse({ ok: true, state });

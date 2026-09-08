@@ -157,52 +157,6 @@ select.lang {
   border-bottom: 1px solid var(--hairline);
 }
 
-/* --- mode --------------------------------------------------------------- */
-
-/* The first thing under the header: what the subtitles are for, rather than
-   which recogniser makes them. */
-.modes {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px 14px 0;
-}
-
-.segmented {
-  display: flex;
-  gap: 2px;
-  padding: 2px;
-  border: 1px solid var(--hairline);
-  border-radius: var(--radius);
-  background: var(--raised);
-}
-
-.segment {
-  flex: 1;
-  min-width: 0;
-  padding: 5px 6px;
-  font-size: 11.5px;
-  color: var(--muted);
-  background: transparent;
-  border-color: transparent;
-  border-radius: 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.segment:hover:not(:disabled):not([aria-pressed='true']) {
-  color: var(--text);
-  background: var(--raised-hover);
-}
-
-.segment[aria-pressed='true'] {
-  color: #000;
-  background: var(--text);
-  border-color: var(--text);
-  font-weight: 550;
-}
-
 /* --- subtitles ---------------------------------------------------------- */
 
 .transcript {

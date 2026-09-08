@@ -8,7 +8,7 @@ Tab Subtitles creates live captions from audio playing in a browser tab selected
 
 When the user starts captions, the extension handles audio from the selected tab and the transcript produced from that audio. It also reads the selected tab’s title, URL/host, and audio state to identify the caption session. Audio or text may contain personal communications or other personal information depending on what the user chooses to caption.
 
-The extension stores preferences such as the caption mode, language, subtitle appearance, and feature switches in Chrome local storage. It stores the active tab identifier and invocation state in Chrome session storage while needed for the current browser session.
+The extension stores preferences such as the recognition engine, language, subtitle appearance, and feature switches in Chrome local storage. It stores the active tab identifier and invocation state in Chrome session storage while needed for the current browser session.
 
 ## How information is used
 
@@ -16,11 +16,11 @@ This information is used only to create live captions, optionally distinguish sp
 
 ## Processing and sharing
 
-In Quick captions and Translate modes, Tab Subtitles uses Chrome Speech Recognition. Depending on the user’s Chrome installation and language model availability, Chrome may transmit tab audio to Google for transcription. That processing is governed by Google’s applicable terms and privacy policy. The extension UI identifies whether Chrome reports the active recognizer as cloud-based or on-device.
+With the Auto and Chrome engines, Tab Subtitles uses Chrome Speech Recognition. Depending on the user’s Chrome installation and language model availability, Chrome may transmit tab audio to Google for transcription. That processing is governed by Google’s applicable terms and privacy policy. The extension UI identifies whether Chrome reports the active recognizer as cloud-based or on-device.
 
-In Private (offline) mode, speech recognition runs locally in the browser. Optional speaker separation also runs locally. Optional translation uses Chrome’s built-in Translator, which runs on the device after Chrome downloads the language pair’s model; transcripts are not sent to a translation service. Enabling these features downloads machine-learning model files from Hugging Face over HTTPS; audio and transcripts are not sent to Hugging Face.
+With the offline model, speech recognition runs locally in the browser. Optional speaker separation also runs locally. Optional translation uses Chrome’s built-in Translator, which runs on the device after Chrome downloads the language pair’s model; transcripts are not sent to a translation service. Enabling these features downloads machine-learning model files from Hugging Face over HTTPS; audio and transcripts are not sent to Hugging Face.
 
-The developer does not operate a backend for Tab Subtitles and does not receive, collect, sell, or use tab audio, transcripts, browsing information, or settings for advertising or analytics. Information is not shared with third parties except for Chrome/Google processing described above when the user chooses Quick captions or Translate.
+The developer does not operate a backend for Tab Subtitles and does not receive, collect, sell, or use tab audio, transcripts, browsing information, or settings for advertising or analytics. Information is not shared with third parties except for Chrome/Google processing described above when the user chooses the Auto or Chrome engine.
 
 ## Storage and retention
 
@@ -34,7 +34,7 @@ Network requests used for Chrome transcription or model downloads use HTTPS or b
 
 ## User choices
 
-Users can select Private (offline) mode before starting captions to keep speech recognition on their device. On-page subtitles are optional and disabled by default. Speaker separation is on by default and can be switched off in settings; it runs locally and downloads an approximately 7 MB model on first use. Users can stop captions at any time, clear the visible transcript, remove saved exports, clear extension storage, or uninstall the extension.
+Users can select the offline model in settings before starting captions to keep speech recognition on their device. On-page subtitles are optional and disabled by default. Speaker separation is on by default and can be switched off in settings; it runs locally and downloads an approximately 7 MB model on first use. Users can stop captions at any time, clear the visible transcript, remove saved exports, clear extension storage, or uninstall the extension.
 
 ## Changes and contact
 
