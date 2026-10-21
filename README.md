@@ -10,6 +10,9 @@ Videos, meetings, podcasts and streams — transcribed and translated on your ow
 &nbsp;
 [![View source](https://img.shields.io/badge/View%20source-24292f?style=for-the-badge&logo=github&logoColor=white)](https://github.com/hypnagonia/tab-subtitles)
 
+[![CI](https://github.com/hypnagonia/tab-subtitles/actions/workflows/ci.yml/badge.svg)](https://github.com/hypnagonia/tab-subtitles/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 <table>
   <tr>
     <td width="50%"><img src="store/media/screenshot-1-live.png" alt="Private captions in the side panel and over the video" width="100%"></td>
@@ -89,3 +92,7 @@ npm run release   # build, test, validate assets, and create the store ZIP
 The production extension is built into `dist/`. The Chrome Web Store upload archive is generated under `release/`.
 
 Store listing copy, permission justifications, asset paths, and the submission checklist are in [CHROMEWEBSTORE.md](CHROMEWEBSTORE.md).
+
+## License
+
+[MIT](LICENSE)
